@@ -12,13 +12,8 @@ read `requiments.txt`.
 # Installation
 
 ## パッケージ化されたものをインストールしたいですか？
-### MacOS
-Schreen_1.0.0 : https://github.com/hirossan4049/Schreen/releases/download/1.0.0/Shcreen_1.0.0.dmg
 
-### Windows
-comming soon
-
-### 他のリリースされたものすべてを見る
+** Windows coming soon. sorry. **
 https://github.com/hirossan4049/Schreen/releases
 
 ## いや、改良、コードを見たい、修正したいですか？
