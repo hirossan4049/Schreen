@@ -14,6 +14,7 @@ read `requiments.txt`.
 ## パッケージ化されたものをインストールしたいですか？
 
 ** Windows coming soon. sorry. **
+
 https://github.com/hirossan4049/Schreen/releases
 
 ## いや、改良、コードを見たい、修正したいですか？
