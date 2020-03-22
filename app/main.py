@@ -49,6 +49,8 @@ class MainWindow(Screen):
     def __init__(self, **kwargs):
         super(MainWindow, self).__init__(**kwargs)
         # self.ids.stop_btn.disabled = True
+        self._befor_port = ""
+        self._befor_quality = 0
 
     # テスト用のクリックイベントです。
     def testClick(self):
@@ -70,8 +72,7 @@ class MainWindow(Screen):
 
     def quality(self) -> int:
         item = self.ids.quality_dropdown.current_item
-        print("item:",item)
-        res = 2
+        res = 0
         if item == "普通":
             res = 2
         elif item == "高品質":
@@ -98,26 +99,35 @@ class MainWindow(Screen):
             return False
         return True
 
+    # FIXME:品質のみの再起動の場合は、品質のみ変えるように。
     def start(self):
         global server_thread
+        quality = self.quality()
         if not self.ids.stop_btn.disabled:
-            Logger.info("stop_btn disabled shutdown server now")
-            # ユーザーが短気だった場合の保険(連打防止)  FIXME:実は意味無い説
-            self.ids.start_btn.disabled = True
-            dashsev.shutdown_server()
-            time.sleep(.5)
-            Logger.info("=====SHUTDOWN MAYBE COMPLETE=====")
+            # 品質のみの再起動の場合は、品質のみ変えるように。
+            if dashsev.port == int(self.ids.port_text.text):
+                if dashsev.get_quality == quality:
+                    Logger.info("stop_btn disabled shutdown server now")
+                    # ユーザーが短気だった場合の保険(連打防止)  FIXME:実は意味無い説
+                    self.ids.start_btn.disabled = True
+                    dashsev.shutdown_server()
+                    time.sleep(.5)
+                    Logger.info("=====SHUTDOWN MAYBE COMPLETE=====")
+                else:
+                    dashsev.set_quality(quality)
+                    return False
 
         if not self.check_port():
             self.ids.start_btn.disabled = False
             return False
-        dashsev.quality = self.quality()
+        dashsev.quality = quality
         dashsev.port = int(self.ids.port_text.text)
-        server_thread = threading.Thread(target=dashsev.startServer)  # assign Flask(dash) to a process
+        server_thread = threading.Thread(target=dashsev.startServer)
         server_thread.start()
         self.ids.stop_btn.disabled = False
         self.ids.start_btn.disabled = False
         self.ids.start_btn.text = "再起動"
+
 
 
     def stop(self):

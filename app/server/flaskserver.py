@@ -20,17 +20,18 @@ from DEBUG import DEBUG,resource_path
 #     from sct_loop import Sct_loop
 # else:
 #     from server.sct_loop import Sct_loop
-
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("8.8.8.8", 80))
-localIP = s.getsockname()[0]
-s.close()
-
+try:
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    localIP = s.getsockname()[0]
+    s.close()
+except:
+    Logger.error("INTERNET ERROR")
 # FIXME:Flaskってどうやったらきれいにかけるんや？
 
 do_run = True
-quality = 2
-port = 8050
+quality = 0
+port = 2525
 SHUTDOWN_UUID = uuid.uuid4()
 
 sct_cls = Sct_loop(quality)
@@ -88,6 +89,11 @@ def shutdown_acs():
 
 # ====================================================
 
+def set_quality(quality):
+    sct_cls.set_quality(quality)
+
+def get_quality():
+    return sct_cls.get_quality()
 
 def openBrowser():
     import webbrowser
