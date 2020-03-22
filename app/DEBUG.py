@@ -1,7 +1,7 @@
 import os
 import sys
 
-DEBUG = True
+DEBUG = False
 
 def resource_path(relative):
   if hasattr(sys, "_MEIPASS"):
