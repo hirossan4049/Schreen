@@ -42,6 +42,7 @@ def client_loop():
     while do_run:
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + sct_cls.res + b'\r\n\r\n')
+        time.sleep(1 / 60)
     return "Server exited!"
 
 

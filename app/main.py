@@ -23,7 +23,13 @@ from DEBUG import DEBUG,resource_path
 
 
 if DEBUG:
-    Logger.warning("!!!!DEBUG TRUE!!!!!!")
+    Logger.warning("""
+
+    /////////////////////////////////////
+    //      WARNING -> DEBUG TRUE      //
+    /////////////////////////////////////
+    
+    """)
     resource_add_path("fonts/")
     LabelBase.register(DEFAULT_FONT, "fonts/SourceHanSans.otf")
     help_icon_path = "images/help_icon.png"
