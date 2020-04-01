@@ -23,7 +23,7 @@ class Sct_loop:
         self._fps_cache = 0
         self._draw_num = 0
         self._draw_cache_num = 0
-        self.encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 35]
+        self.encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 25]
 
 
 
@@ -38,7 +38,7 @@ class Sct_loop:
         ret_bytes = jpeg.tobytes()
         # self._draw_num += 1
         endtime = time.time() - t
-        time.sleep(1 - endtime)
+        time.sleep(.7 - endtime)
         self.res = [self._draw_num, ret_bytes]
         # return ret_bytes
 
@@ -58,7 +58,7 @@ class Sct_loop:
                 future = excuter.submit(self.sct_func)
                 # self.res = future.result()
                 # print("NOW LOADING")
-                time.sleep(1/25)
+                time.sleep(1/30)
                 # time.sleep(1 / (self.quality * 30))
 
     def fps_checker(self):
