@@ -7,7 +7,7 @@ import cv2
 Logger.info("===CV2 LOAD OK!===")
 import mss
 import numpy
-
+import pyautogui
 
 class Sct_loop:
     def __init__(self,quality=2):
@@ -26,14 +26,16 @@ class Sct_loop:
         self.encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 25]
 
 
-
+    # TODO:マウスカーソルの描画
     def sct_func(self):
         t = time.time()
         self._fps_cache += 1
         sct_mss = self.sct.grab(self.monitor)
         img = numpy.array(sct_mss)
+        img = self._draw_mouse_cursor(img)
         # img = cv2.UMat(numpy.array(sct_mss))
         resized_img = cv2.resize(img, (self.width // self.quality, self.height // self.quality))
+
         _, jpeg = cv2.imencode('.jpg', resized_img, self.encode_param)
         ret_bytes = jpeg.tobytes()
         # self._draw_num += 1
@@ -41,6 +43,12 @@ class Sct_loop:
         time.sleep(.7 - endtime)
         self.res = [self._draw_num, ret_bytes]
         # return ret_bytes
+
+    def _draw_mouse_cursor(self, cvdata):
+        pypos = pyautogui.position()
+        pos = pypos.x * 2,pypos.y * 2
+        cv2.circle(cvdata, pos, 10, (0,0,255), -1)
+        return cvdata
 
     # def timeout_func(self):
     #     timeout_file = os.getcwd() + "/timeout_img.png"
