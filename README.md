@@ -10,7 +10,7 @@ This application is easy to screen sharing.
 read `requiments.txt`.
 
 # Installation
-
+**OpenCVのバージョンは、3を使用してください。4だとPyinsatllerでパッケージ化したときにエラー吐きます**
 ## パッケージ化されたものをインストールしたいですか？
 
 ** Windows coming soon. sorry. **

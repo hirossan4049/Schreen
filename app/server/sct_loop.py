@@ -7,7 +7,7 @@ import cv2
 Logger.info("===CV2 LOAD OK!===")
 import mss
 import numpy
-import pyautogui
+# import pyautogui
 
 class Sct_loop:
     def __init__(self,quality=2):
@@ -32,7 +32,7 @@ class Sct_loop:
         self._fps_cache += 1
         sct_mss = self.sct.grab(self.monitor)
         img = numpy.array(sct_mss)
-        img = self._draw_mouse_cursor(img)
+        # img = self._draw_mouse_cursor(img)
         # img = cv2.UMat(numpy.array(sct_mss))
         resized_img = cv2.resize(img, (self.width // self.quality, self.height // self.quality))
 
