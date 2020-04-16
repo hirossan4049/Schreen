@@ -1,11 +1,12 @@
-import os
+#import os
 # from multiprocessing import Process
-import threading
+
 import time
 
 importstart = time.time()
 #import server.flaskserver as dashsev
 from kivy import Logger
+from kivy.clock import Clock
 from kivy.core.text import LabelBase, DEFAULT_FONT
 # from kivy.factory import Factory
 from kivy.graphics.svg import Window
@@ -19,6 +20,7 @@ from kivy.uix.screenmanager import Screen
 # from kivy.utils import get_hex_from_color
 from kivymd.app import MDApp
 from kivy.lang import Builder
+import threading
 
 from DEBUG import DEBUG,resource_path
 
@@ -108,8 +110,14 @@ class MainWindow(Screen):
             return False
         return True
 
+
     # FIXME:品質のみの再起動の場合は、品質のみ変えるように。
     def start(self):
+    # ユーザーが短気だった場合の保険(連打防止)  FIXME:実は意味無い説
+        self.ids.start_btn.disabled = True
+        Clock.schedule_once(self.start_server,0)
+
+    def start_server(self,*args):
         import server.flaskserver as flaskserver
         global server_thread
         quality = self.quality()
@@ -117,9 +125,7 @@ class MainWindow(Screen):
             # 品質のみの再起動の場合は、品質のみ変えるように。
             if flaskserver.port == int(self.ids.port_text.text):
                 if flaskserver.get_quality == quality:
-                    Logger.info("stop_btn disabled shutdown server now")
-                    # ユーザーが短気だった場合の保険(連打防止)  FIXME:実は意味無い説
-                    self.ids.start_btn.disabled = True
+                    Logger.info("shutdown server now")
                     flaskserver.shutdown_server()
                     time.sleep(.5)
                     Logger.info("=====SHUTDOWN MAYBE COMPLETE=====")
@@ -140,17 +146,25 @@ class MainWindow(Screen):
 
 
 
+
     def stop(self):
+        Clock.schedule_once(self.stop_server,0)
+        
+    def stop_server(self,*args):
         try:
+            import server.flaskserver as flaskserver
             flaskserver.shutdown_server()
         except ImportError:
             pass
         except:
             Logger.error("flaskserver:shutdown_server() func error.")
+            self.error_dialog("内部エラー\nflaskserver: shutdown_server() func error.\napp/main.py:147")
 
         self.ids.stop_btn.disabled = True
         self.ids.start_btn.text = "起動"
-        print("EVENT CLEAR")
+        Logger.info("EVENT CLEAR")
+
+
 
     def error_dialog(self,content):
         popup = CustomDialog(
@@ -168,8 +182,15 @@ class MainApp(MDApp):
         Window.size = 500, 300
 
     def on_stop(self):
+        # FIXME:Clockいくなかった
+        #Clock.schedule_once(self.server_stop,0)
+        self.server_stop()
+
+
+    def server_stop(self, *args):
         global server_thread
         try:
+            import server.flaskserver as flaskserver
             flaskserver.shutdown_server()
         except ImportError:
             pass
