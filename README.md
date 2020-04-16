@@ -1,4 +1,4 @@
-# Schreen1.1.0
+# Schreen1.1.1
 This application is easy to screen sharing.
 <br>
 かんたんにローカル内で画面共有ができるアプリケーションでｔｈ。
@@ -30,6 +30,9 @@ pip install -r requirements.txt
 ```bash
 python app/main.py
 ```
+
+# ChangeLog
+**1.1.1** : flask import 場所変更。起動速度上昇。
 
 # Note
 `pyinstaller`で`.app`化するときは、`app/DEBUG.py`の`DEBUG=True`を`DEBUG=False`にしてください。
