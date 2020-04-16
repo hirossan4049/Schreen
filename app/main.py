@@ -3,7 +3,8 @@ import os
 import threading
 import time
 
-import server.flaskserver as dashsev
+importstart = time.time()
+#import server.flaskserver as dashsev
 from kivy import Logger
 from kivy.core.text import LabelBase, DEFAULT_FONT
 # from kivy.factory import Factory
@@ -20,6 +21,8 @@ from kivymd.app import MDApp
 from kivy.lang import Builder
 
 from DEBUG import DEBUG,resource_path
+
+Logger.info("importTime:{}".format(time.time() - importstart))
 
 
 if DEBUG:
@@ -107,28 +110,29 @@ class MainWindow(Screen):
 
     # FIXME:品質のみの再起動の場合は、品質のみ変えるように。
     def start(self):
+        import server.flaskserver as flaskserver
         global server_thread
         quality = self.quality()
         if not self.ids.stop_btn.disabled:
             # 品質のみの再起動の場合は、品質のみ変えるように。
-            if dashsev.port == int(self.ids.port_text.text):
-                if dashsev.get_quality == quality:
+            if flaskserver.port == int(self.ids.port_text.text):
+                if flaskserver.get_quality == quality:
                     Logger.info("stop_btn disabled shutdown server now")
                     # ユーザーが短気だった場合の保険(連打防止)  FIXME:実は意味無い説
                     self.ids.start_btn.disabled = True
-                    dashsev.shutdown_server()
+                    flaskserver.shutdown_server()
                     time.sleep(.5)
                     Logger.info("=====SHUTDOWN MAYBE COMPLETE=====")
                 else:
-                    dashsev.set_quality(quality)
+                    flaskserver.set_quality(quality)
                     return False
 
         if not self.check_port():
             self.ids.start_btn.disabled = False
             return False
-        dashsev.quality = quality
-        dashsev.port = int(self.ids.port_text.text)
-        server_thread = threading.Thread(target=dashsev.startServer)
+        flaskserver.quality = quality
+        flaskserver.port = int(self.ids.port_text.text)
+        server_thread = threading.Thread(target=flaskserver.startServer)
         server_thread.start()
         self.ids.stop_btn.disabled = False
         self.ids.start_btn.disabled = False
@@ -137,7 +141,13 @@ class MainWindow(Screen):
 
 
     def stop(self):
-        dashsev.shutdown_server()
+        try:
+            flaskserver.shutdown_server()
+        except ImportError:
+            pass
+        except:
+            Logger.error("flaskserver:shutdown_server() func error.")
+
         self.ids.stop_btn.disabled = True
         self.ids.start_btn.text = "起動"
         print("EVENT CLEAR")
@@ -159,7 +169,13 @@ class MainApp(MDApp):
 
     def on_stop(self):
         global server_thread
-        dashsev.shutdown_server()
+        try:
+            flaskserver.shutdown_server()
+        except ImportError:
+            pass
+        except:
+            Logger.error("flaskserver:MAINAPP ERROR.shutdown_server() func error.")
+
         try:
             Logger.info("server thread join now...")
             server_thread.join()
