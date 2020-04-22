@@ -1,0 +1,18 @@
+$openssl genrsa -out secret.key 2048
+
+$openssl req -new -sha256 -key secret.key -out server.csr
+
+Country Name (2 letter code) []:jp
+State or Province Name (full name) []:fafa
+Locality Name (eg, city) []:afafa
+Organization Name (eg, company) []:faf
+Organizational Unit Name (eg, section) []:ff
+Common Name (eg, fully qualified host name) []:ff
+Email Address []:ff
+
+A challenge password []:
+
+
+$echo "subjectAltName = IP:192.168.0.102" > san.txt                                              
+
+$openssl x509 -req -sha256 -days 3650 -signkey secret.key -in server.csr -out server.crt -extfile san.txt
