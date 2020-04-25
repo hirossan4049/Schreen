@@ -27,6 +27,7 @@ from DEBUG import DEBUG,resource_path
 Logger.info("importTime:{}".format(time.time() - importstart))
 
 
+#TODO;パスの変更
 if DEBUG:
     Logger.warning("""
 
@@ -149,7 +150,6 @@ class MainWindow(Screen):
 
     def stop(self):
         Clock.schedule_once(self.stop_server,0)
-
         
     def stop_server(self,*args):
         try:

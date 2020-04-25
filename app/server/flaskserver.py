@@ -32,6 +32,10 @@ except:
 do_run = True
 quality = 0
 port = 2525
+isSsl = False
+cert = "/Users/unkonow/Documents/pg/python/nowProject/schreen/Schreen/app/ssl/server.crt"
+key  = "/Users/unkonow/Documents/pg/python/nowProject/schreen/Schreen/app/ssl/secret.key"
+
 SHUTDOWN_UUID = uuid.uuid4()
 
 sct_cls = Sct_loop(quality)
@@ -99,7 +103,10 @@ def get_quality():
 def openBrowser():
     import webbrowser
     time.sleep(.5)
-    webbrowser.open("http://{ip}:{port}".format(ip=localIP, port=port))
+    if isSsl:
+        webbrowser.open("https://{ip}:{port}".format(ip=localIP, port=port))
+    else:
+        webbrowser.open("http://{ip}:{port}".format(ip=localIP, port=port))
 
 
 def startServer():
@@ -110,7 +117,14 @@ def startServer():
     th = threading.Thread(target=openBrowser)
     th.start()
     # app.run_server(debug=False, host=localIP, port=port)
-    app.run(debug=False, host=localIP, port=port, threaded=True)
+    if isSsl:
+        try:
+            app.run(debug=False, host=localIP, port=port, ssl_context=(cert, key),  threaded=True)
+        except FileNotFoundError:
+            logger.error("FILE NOT FOUND ERROR")
+    else:
+        app.run(debug=False, host=localIP, port=port, threaded=True)
+
     th.join()
 
 
@@ -119,7 +133,10 @@ def shutdown_server():
     import requests
     do_run = False
     try:
-        requests.get("http://{ip}:{port}/shutdown/{uuid}".format(ip=localIP, port=port, uuid=SHUTDOWN_UUID))
+        if isSsl:
+            requests.get("https://{ip}:{port}/shutdown/{uuid}".format(ip=localIP, port=port, uuid=SHUTDOWN_UUID))
+        else:
+            requests.get("http://{ip}:{port}/shutdown/{uuid}".format(ip=localIP, port=port, uuid=SHUTDOWN_UUID))
         sct_cls.exit()
     except requests.exceptions.ConnectionError:
         Logger.info("すでにEXITしてます")
