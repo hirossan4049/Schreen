@@ -1,4 +1,6 @@
-<SettingsWindow>:
+#FIXME:KvViewer
+SettingsWindow
+<SettingsWindow@BoxLayout>:
     BoxLayout:
         Splitter:
             strip_size: 5  
@@ -55,6 +57,7 @@
 
         BoxLayout:
             orientation:"vertical"
+            id:settingBoxLayout
 
             #size_hint:1,1
             
@@ -77,48 +80,90 @@
 
 
 
-            
-            ScreenManager:
-                id:setting_screen_manager
+            # FIXME:kvViewer
+            #ScreenManager:
+            #    id:setting_screen_manager
+            SSLSetting:
+
+
 
             BoxLayout:
-                size_hint:.5,.05
-                spacing: dp(15)
+                id:messageBoxLayout
+                #size_hint:.5,.05
+                size_hint:None,None
+                size:150*3,70
+                pos_hint:{"center_x":.7}
+                spacing: dp(10)
+                padding: dp(5)  
+
+
+                canvas:
+                    Color:
+                        rgba: 1,0,1,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+                #Widget:
+                #    size_hint:None,.5
+                #    background_color:1,0,0,1
+
                 MDRaisedButton:
                     size_hint:None,None
-                    size:1000,75
-                    pos_hint:{"center_x":.7,"center_y":.9}
-                    text:"ok"
+                    size:150,70
+                    #pos_hint:{"center_x":.7,"center_y":.9}
+                    text:"OK"
                 MDRaisedButton:
                     size_hint:None,None
-                    pos_hint:{"center_x":.9,"center_y":.9}
+                    size:150,70
+                    #pos_hint:{"center_x":.9,"center_y":.9}
                     text:"cancel"
+                MDRaisedButton:
+                    size_hint:None,None
+                    size:150,70
+                    #pos_hint:{"center_x":.9,"center_y":.9}
+                    text:"apply"
+
+                    canvas.before:
+                        Color:
+                            rgba: (0,0,0,1)
+                        Line:
+                            #width:3
+                            rectangle: (settingBoxLayout.x,self.y + 75,root.width,0)
                 
 
 
-<SSLSetting>:
+# FIXME:KvViewer
+<SSLSetting@BoxLayout>:
     ScrollView:
         BoxLayout:
-            size_hint:1,1
+            #size_hint:1,1
+            size_hint:1,None
+            pos_hint:{"y":0}
             orientation:"vertical"
             padding:dp(25)
             height: self.minimum_height
             
 
             BoxLayout:
-                size_hint:1,.1
+                size_hint:1,None
                 #pos_hint:{"center_x":.5}
                 MDLabel:
                     text_size: self.size
-                    size_hint:1,None
+                    size_hint:None,None
                     pos_hint:{"center_y":.5}
-                    size:100,10
+                    size:100,30
                     text:"enable"
                     halign: 'left'
                     valign: 'middle'
+                Widget:
+                    size_hint:None,None
+                    size:root.x * 2,30
                 MDSwitch:
+                    id:enableSwitch
                     active:False
                     size_hint:None,None
+                    size:80,30
                     pos_hint:{"center_y":.5}
 
             BoxLayout:
@@ -139,52 +184,76 @@
                 MDTextField:
                     size_hint:None,None
                     pos_hint:{"center_y":.5}
-                    size:400,30
+                    size:500,30
+                    disabled: not enableSwitch.active 
                     text:"usr/bin/openssl"
+                    color_mode: "custom"
+                    line_color_focus:
+                        self.theme_cls.opposite_bg_normal
 
             BoxLayout:
-                size_hint:1,.1
+                size_hint:1,None
                 #pos_hint:{"center_x":.5}
                 MDLabel:
-                    size_hint:1,None
-                    size:100,30
-                    pos_hint:{"center_x":.5}
+                    size_hint:None,None
+                    size:250,30
+                    pos_hint:{"center_y":.5}
                     text:"OpenSSL Version"
-                MDFlatButton:
+                Widget:
+                    size_hint:.5,None
+                MDLabel:
+                    pos_hint:{"center_y":.5}
+                    size:500,30
                     text:"LibreSSL 2.8.3"
 
-            BoxLayout:
-                size_hint:1,.3
-                #pos_hint:{"center_x":.5}
-                MDLabel:
-                    font_size:dp(10)
-                    size:100,10
-                    size_hint:1,None
-                    pos_hint:{"center_x":.5}
-                    text:"KEY SETTING"
-                MDFlatButton:
-                    text:"create Keys wizard"
+            #BoxLayout:
+            #    size_hint:1,None
+            #    #pos_hint:{"center_x":.5}
+            #    MDLabel:
+            #        #font_size:dp(10)
+            #        size_hint:None,None
+            #        size:250,30
+            #        pos_hint:{"center_y":.5}
+            #        text:"SSLKey settings"
+            #    Widget:
+            #        size_hint:.3,None
+            #    MDRectangleFlatButton:
+            #        size_hint:None,None
+            #        size:100,40
+            #        #text_color:.2,.1,.7,1
+            #        pos_hint:{"center_y":.5}
+            #        text:"create Keys wizard"
 
             BoxLayout:
-                size_hint:1,.1
+                size_hint:1,None
                 #pos_hint:{"center_x":.5}
                 MDLabel:
-                    size_hint:1,None
-                    size:100,10
-                    pos_hint:{"center_x":.5}
+                    size_hint:None,None
+                    size:250,10
+                    pos_hint:{"center_y":.5}
                     text:"cert Path"
+                Widget:
+                    size_hint:.3,None
                 MDTextField:                
+                    size_hint:None,None
+                    size:500,30
+                    disabled: not enableSwitch.active 
                     text:"path/path/cert.crt"
 
             BoxLayout:
-                size_hint:1,.1
+                size_hint:1,None
                 #pos_hint:{"center_x":.5}
                 MDLabel:
-                    size_hint:1,None
-                    size:100,10
-                    pos_hint:{"center_x":.5}
+                    size_hint:None,None
+                    size:250,30
+                    pos_hint:{"center_y":.5}
                     text:"key path"
+                Widget:
+                    size_hint:.3,None
                 MDTextField:                
+                    size_hint:None,None
+                    size:500,30  
+                    disabled: not enableSwitch.active 
                     text:"ユーザー/path/key.key"
 
 
