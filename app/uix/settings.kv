@@ -85,56 +85,59 @@
 
             # FIXME:kvViewer
             ScreenManager:
+                size_hint:1,1
                 id:setting_screen_manager
             #SSLSetting:
 
 
 
-            BoxLayout:
-                id:messageBoxLayout
-                #size_hint:.5,.05
-                size_hint:None,None
-                size:150*3,70
-                pos_hint:{"center_x":.75,"y":.5}
+            #BoxLayout:
+            #    id:messageBoxLayout
+            #    #size_hint:.5,.05
+            #    size_hint:None,None
+            #    size:150*3,70
+            #    pos_hint:{"center_x":.75,"y":.5}
 
-                spacing: dp(10)
-                padding: dp(2)  
+            #    spacing: dp(10)
+            #    padding: dp(2)  
 
 
-                #canvas:
-                #    Color:
-                #        rgba: 1,0,1,1
-                #    Rectangle:
-                #        size: self.size
-                #        pos: self.pos
+            #    #canvas:
+            #    #    Color:
+            #    #        rgba: 1,0,1,1
+            #    #    Rectangle:
+            #    #        size: self.size
+            #    #        pos: self.pos
 
-                #Widget:
-                #    size_hint:None,.5
-                #    background_color:1,0,0,1
+            #    #Widget:
+            #    #    size_hint:None,.5
+            #    #    background_color:1,0,0,1
 
-                MDRaisedButton:
-                    size_hint:None,None
-                    size:150,70
-                    text:"OK"
-                MDRaisedButton:
-                    size_hint:None,None
-                    size:150,70
-                    text:"cancel"
-                MDRaisedButton:
-                    size_hint:None,None
-                    size:150,70
-                    text:"apply"
-                    canvas.before:
-                        Color:
-                            rgba: (0,0,0,1)
-                        Line:
-                            #width:3
-                            rectangle: (settingBoxLayout.x,self.y + 75,root.width,0)
+            #    MDRaisedButton:
+            #        size_hint:None,None
+            #        size:150,70
+            #        text:"OK"
+            #    MDRaisedButton:
+            #        size_hint:None,None
+            #        size:150,70
+            #        text:"cancel"
+            #    MDRaisedButton:
+            #        size_hint:None,None
+            #        size:150,70
+            #        text:"apply"
+            #        canvas.before:
+            #            Color:
+            #                rgba: (0,0,0,1)
+            #            Line:
+            #                #width:3
+            #                rectangle: (settingBoxLayout.x,self.y + 75,root.width,0)
                 
 
 
 # FIXME:KvViewer
 <SSLSetting>:
+    id:sslSettingBoxLayout
+    size_hint:1,1
     ScrollView:
         BoxLayout:
             #size_hint:1,1
@@ -261,6 +264,34 @@
                 text_color:.2,.2,.2,1
                 text:"create SSL Key"
 
+    BoxLayout:
+        id:messageBoxLayout
+        size_hint:None,None
+        size:150*3,70
+        pos_hint:{"center_x":.75,"y":0}
+
+        spacing: dp(10)
+        padding: dp(2)  
+
+        MDRaisedButton:
+            size_hint:None,None
+            size:150,70
+            text:"OK"
+            on_release:root.press_ok()
+        MDRaisedButton:
+            size_hint:None,None
+            size:150,70
+            text:"cancel"
+        MDRaisedButton:
+            size_hint:None,None
+            size:150,70
+            text:"apply"
+            on_release:root.press_apply()
+            canvas.before:
+                Color:
+                    rgba: (0,0,0,1)
+                Line:
+                    rectangle: (0,75,root.width,0)
 
 <LangSetting>:
     BoxLayout:
