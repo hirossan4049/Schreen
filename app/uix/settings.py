@@ -27,6 +27,7 @@ class SSLSetting(Screen):
                  
 
     def press_ok(self):
+        self.settings_save()
         MDApp.get_running_app().stop()
     def press_cancel(self):
         pass
@@ -85,6 +86,8 @@ class SettingsWindow(BoxLayout):
         self.ids.setting_screen_manager.add_widget(DeveloperSetting(name="developer"))
         self.ids.setting_screen_manager.transition = NoTransition()
         #self.ids.setting_screen_manager.switch_to(SSLSetting())
+        # いけるんかーーーーい
+        #print(self.ids.setting_screen_manager.get_screen("ssl").ids)
 
     def gotoSSL(self):
         #self.ids.setting_screen_manager.switch_to(SSLSetting())

@@ -1,4 +1,6 @@
 import pexpect
+import timeout_decorator
+
 
 
 class OpenSSLNotFoundError(Exception):
@@ -17,15 +19,15 @@ def getOpenSSLVersion():
 
                                    
 class CreateSSLKey:
-    def __init__(self):
-        self.path = "/Users/unkonow/Documents/pg/python/nowProject/schreen/Schreen/app/ssl"
-        self.ip = "192.168.0.102"
+    def __init__(self,path,ip,country="JP",province="Osaka",locality="Sakai",email="unko@unko.com"):
+        self.path = path
+        self.ip = ip
 
-        self.country = "JP"
-        self.province = "Osaka"
-        self.locality = "Sakai"
+        self.country = country
+        self.province = province
+        self.locality = locality
         self.organization = "Schreen"
-        self.email = "unko@unko.com"
+        self.email = email
 
 
 
@@ -68,7 +70,7 @@ class CreateSSLKey:
         else:
             print("ERROR:",retn)
                 
-
+    @timeout_decorator.timeout(5,use_signals=False)
     def start(self):
         # Check Openssl
         try:
@@ -76,15 +78,21 @@ class CreateSSLKey:
         except OpenSSLNotFoundError:
             return "OPENSSL NOT FOUND"
 
+        print("START CreateSertKey")
         self._createSecrtKey()
+        print("DONE! CreateSertKey")
+        print("START CSR")
         self._createcsr()
+        print("DONE! CSR")
         self._createSan()
+        print("DONE! SAN")
         self._createCrt()
+        print("DONE! CRT")
         print("Done!")
 
 
-csk = CreateSSLKey()
-csk.start()
+#csk = CreateSSLKey()
+#csk.start()
 
         
 

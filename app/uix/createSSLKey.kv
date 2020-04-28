@@ -1,0 +1,145 @@
+#CreateSSLKeyWindow
+<CreateSSLKeyWindow>:
+    orientation:"vertical"
+
+    MDLabel:
+        size_hint:1,None
+        size:1,75
+        text_size:self.size
+        halign:"center"
+        text:"Schreen create SSL Key wizard"
+        canvas.before:
+            Color:
+                rgba: (0,0,0,1)
+            Line:
+                rectangle: (self.x,self.y,root.width,0)
+
+    ScreenManager:
+        id:wizard_ScreenManager
+        size_hint:1,1
+
+    BoxLayout:
+        size_hint:.99,None
+        #pos: 3000,0
+        #pos_hint:{"right":.8}
+        padding: dp(15)
+        spacing: dp(15)
+        Widget:
+
+        MDRaisedButton:
+            size_hint:None,None
+            size:100,75
+            text:"cancel"
+        MDRaisedButton:
+            id:nextButton
+            size_hint:None,None
+            size:100,75
+            text:"next"
+            on_release:root.press_next()
+
+
+<FirstScreen>:
+    BoxLayout:
+        orientation:"vertical"
+        MDLabel:
+            size_hint:1,1
+            text_size:self.size
+            font_size: dp(20)
+            halign:"center"
+            text:"開始するには次へを押してください。\nPlease press next to start!"
+        Widget:
+
+<SecondScreen>:
+    BoxLayout:
+        orientation:"vertical"
+        padding: dp(80)
+        spacing: dp(15)
+        #MDTextField:
+        #    hint_text:"IPアドレス"
+        Widget
+
+        BoxLayout:
+            spacing: dp(15)
+            MDTextField:
+                id:keyPathTextField
+                required: True
+                hint_text:"Keyを保存するディレクトリ"
+                helper_text_mode: "on_error"
+
+            MDIconButton:
+                icon:"folder"
+                theme_text_color: "Custom"
+                text_color:.2,.2,.2,.8
+
+        BoxLayout:
+            size_hint:1,None
+            spacing: dp(30)
+            MDTextField:
+                id:countryTextField
+                hint_text:"国"
+                required: True
+                helper_text_mode: "on_error"
+            MDTextField:
+                id:provinceTextField
+                hint_text:"都道府県"
+                required: True
+                helper_text_mode: "on_error"
+        BoxLayout:
+            size_hint:1,None
+            spacing: dp(30)
+            MDTextField:
+                id:localityTextField
+                hint_text:"市町村"
+                required: True
+                helper_text_mode: "on_error"
+            MDTextField:
+                id:emailTextField
+                hint_text:"email"
+                required: True
+                helper_text_mode: "on_error"
+
+        Widget
+
+<ThirdScreen>:
+    BoxLayout:
+        orientation:"vertical"
+        padding: dp(75)
+        BoxLayout:
+            size_hint:1,None
+            MDLabel:
+                text:"ThirdScreen"
+            MDIcon:
+                size_hint:None,None
+                icon:"check"
+                theme_text_color: "Custom"
+                text_color: 0,0,0,.1
+        BoxLayout:
+            size_hint:1,None
+            MDLabel:
+                text:"ThirdScreen"
+            MDIcon:
+                size_hint:None,None
+                icon:"check"
+                theme_text_color: "Custom"
+                text_color: .5,.88,.49,1
+        Widget
+
+<DoneScreen>:
+    BoxLayout:
+        orientation:"vertical"
+        padding: dp(75)
+        MDLabel:
+            size_hint:None,None
+            pos_hint:{"center_x":.5}
+            text:"Done!"
+        MDIconButton:
+            size_hint:None,None
+            pos_hint:{"center_x":.5}
+            icon:"check"
+            color:1,1,0,1
+            theme_text_color: "Custom"
+            text_color: .5,.88,.49,1
+        Widget
+
+<FileChoiseWindow>:
+    MDFileManager:

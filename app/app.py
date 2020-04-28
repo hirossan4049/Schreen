@@ -31,24 +31,28 @@ class MainRoot(BoxLayout):
         self.window1 = Factory.MainWindow()
         self.window2 = Factory.SettingsWindow()
         super(MainRoot, self).__init__(**kwargs)
-        self.change_disp()    # 追加
+        self.mainDisplay()    # 追加
 
-    def change_disp(self):
+    def mainDisplay(self):
         global isNoExit
         isNoExit = False
-        print("IS NO EXIT = FALSE")
         self.clear_widgets()
         self.add_widget(self.window1)
         Window.size = 500, 300
 
 
-    def change_disp2(self):
+    def settingsDisplay(self):
         global isNoExit
         isNoExit = True
-        print("IS NO EXIT = TRUE")
         self.clear_widgets()
         self.add_widget(self.window2)
         Window.size = 1000,750
+
+    def createSSLDiskplay(self):
+        global isNoExit
+        isNoExit = True
+        self.clear_widgets()
+        # TODO: create SSL key add_widget
 
 
 
