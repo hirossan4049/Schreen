@@ -68,6 +68,7 @@
 
             MDIconButton:
                 icon:"folder"
+                on_release:root.file_manager_open()
                 theme_text_color: "Custom"
                 text_color:.2,.2,.2,.8
 
@@ -142,4 +143,28 @@
         Widget
 
 <FileChoiseWindow>:
-    MDFileManager:
+    #MDFileManager:
+    background:"images/white.png"
+    size_hint:none,none
+    BoxLayout:
+        orientation:"vertical"
+        MDlabel:
+            size_hint:1,none
+            padding:30,10
+#            pos_hint: {"center_y": 0.9}
+            text:root.title
+            font_size:45
+            color:0.32, 0.43, 0.47,1
+            height: self.texture_size[1]
+        MDseparator:
+        BoxLayout:
+            padding:30,30
+            size_hint:1,.9
+
+
+        MDtextbutton:
+            padding:30,30
+            size_hint:none,none
+            text:"閉じる"
+            pos_hint: {"center_x": 0.9}
+            on_release:root.dismiss()

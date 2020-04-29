@@ -3,6 +3,7 @@ from kivymd.app import MDApp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivymd.toast.kivytoast.kivytoast import toast
+from kivymd.uix.filemanager import MDFileManager
 from kivy.clock import Clock
 from timeout_decorator import TimeoutError
 
@@ -17,7 +18,23 @@ from ssl_setting import CreateSSLKey,OpenSSLNotFoundError
 class FirstScreen(Screen):
     pass
 class SecondScreen(Screen):
-    pass
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.file_manager = MDFileManager(
+            exit_manager = self.exit_manager,
+            select_path = self.select_path,
+            )
+
+
+    def file_manager_open(self):
+        print("FILE MANAGER OPEN")
+        self.file_manager.show("/Users/unkonow/")
+
+    def exit_manager(self,*args):
+        pass
+    def select_path(self,path):
+        print(path)
+
 class ThirdScreen(Screen):
     pass
 class DoneScreen(Screen):
@@ -30,6 +47,12 @@ class CreateSSLKeyWindow(BoxLayout):
         self.ids.wizard_ScreenManager.add_widget(SecondScreen(name="second"))
         self.ids.wizard_ScreenManager.add_widget(ThirdScreen(name="third"))
         self.ids.wizard_ScreenManager.add_widget(DoneScreen(name="done"))
+
+        self.file_manager = MDFileManager(
+                    exit_manager=self.exit_manager,
+                    select_path=self.select_path,
+                    #previous=True,
+                    )
 
 
     def press_next(self):
@@ -60,6 +83,15 @@ class CreateSSLKeyWindow(BoxLayout):
 
     def press_cancel(self):
         pass
+
+    def file_manager_open(self):
+        self.file_manager.show("/")
+
+    def exit_manager(self,*args):
+        pass
+    def select_path(self,path):
+        print(path)
+
 
     def isAllburied(self):
         secondScreen = self.ids.wizard_ScreenManager.get_screen("second")
