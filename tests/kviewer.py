@@ -35,6 +35,11 @@ from watchdog.events import FileSystemEventHandler
 from os.path import dirname, basename, join
 
 
+from kivy.core.text import LabelBase, DEFAULT_FONT
+from kivy.resources import resource_add_path
+resource_add_path("../fonts/")
+LabelBase.register(DEFAULT_FONT, "fonts/SourceHanSans.otf")
+
 if len(argv) != 2:
     print('usage: %s filename.kv' % argv[0])
     exit(1)
