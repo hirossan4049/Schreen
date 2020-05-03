@@ -7,6 +7,8 @@ from kivymd.uix.filemanager import MDFileManager
 from kivy.clock import Clock
 from timeout_decorator import TimeoutError
 
+import threading
+
 import sys
 import pathlib
 current_dir = pathlib.Path(__file__).resolve().parent
@@ -28,7 +30,8 @@ class SecondScreen(Screen):
 
     def file_manager_open(self):
         print("FILE MANAGER OPEN")
-        self.file_manager.show("/Users/unkonow/")
+        #self.file_manager.show("/Users/unkonow/")
+
 
     def exit_manager(self,*args):
         pass
@@ -40,7 +43,7 @@ class ThirdScreen(Screen):
 class DoneScreen(Screen):
     pass
 
-class CreateSSLKeyWindow(BoxLayout):
+class CreateSSLKeyWindow(BoxLayout):  
     def __init__(self,**kwargs):
         super(CreateSSLKeyWindow,self).__init__(**kwargs)
         self.ids.wizard_ScreenManager.add_widget(FirstScreen(name="first"))
@@ -66,7 +69,6 @@ class CreateSSLKeyWindow(BoxLayout):
                 nextscreen = "third"
                 self.ids.nextButton.disabled = True
                 #Clock.schedule_once(self.createStartSSLKey)
-                import threading
                 threading.Thread(target=self.createStartSSLKey).start()
             else:
                 toast("未入力の項目があります。")

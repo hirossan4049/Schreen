@@ -1,3 +1,4 @@
+# https://cheeseshop.hatenadiary.org/entry/20131208/1386465681
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.bubble import Bubble
