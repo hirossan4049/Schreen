@@ -2,8 +2,10 @@ from kivymd.app import MDApp
 from kivymd.uix.label import MDLabel
 from kivy.lang import Builder
 from kivy.uix.modalview import ModalView
-from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.boxlayout import BoxLayout 
+from kivymd.uix.dialog import MDDialog
 from kivy.uix.floatlayout import FloatLayout
+from kivymd.uix.button import MDFlatButton, MDRaisedButton
 from kivy.properties import StringProperty
 from kivy.uix.behaviors import ButtonBehavior  
 from kivy.graphics import *
@@ -60,13 +62,27 @@ Builder.load_string("""
                 #text_size:50,50
                 #color:0.32, 0.43, 0.47,1
 
+        MDSeparator:
 
-        MDTextButton:
-            padding:30,30
-            size_hint:None,None
-            text:"閉じる"
-            pos_hint: {"center_x": 0.9}
-            on_release:root.dismiss()      
+        BoxLayout:
+            size_hint:1,None
+            padding: dp(10)
+            MDRaisedButton:
+                text:"createFolder"
+                on_release:root.create_folder()
+            MDTextField:
+                id:path_textfield
+                size_hint:.8,None
+                pos_hint:{"center_y":.5}
+                text:"ola!"
+                #mode: "rectangle"
+
+            MDTextButton:
+                padding:30,30
+                size_hint:None,None
+                text:"閉じる"
+                pos_hint: {"center_x": 0.9}
+                on_release:root.dismiss()      
 <IconListItem>:
     size_hint:None,None
     size:250,250
@@ -106,7 +122,27 @@ class IconListItem(ButtonBehavior,BoxLayout):
             self.source = "images/folder.png"
         elif os.path.isfile(self.filepath):
             self.source = "images/imageImage.png"
+            self.imget()
+        if len(self.filename) >= 13:
+            path,ext = os.path.splitext(os.path.basename(self.filename))
+            path = path[:10]
+            self.filename = path + ".." + ext
+
+
     def imget(self):
+        path, ext = os.path.splitext(os.path.basename(self.filepath))
+        if ext == ".app":
+            pass
+        elif ext == ".png":
+            image = self.filepath
+        elif ext == ".pdf":
+            image = "images/pdfImage.png"
+        elif ext == ".py":
+            image = "images/pythonImage.png"
+        else:
+            image = "images/nazoImage.png"
+        self.source = image
+        
         pass
     def setIcon(self,imagepath):
         pass
@@ -124,7 +160,9 @@ class BeautifulFileManager(ModalView):
         super().__init__(**kwargs)
         self.baclick = ""   
         #self.backfilepath = ""
+        self.now_dir = ""
         self.backtime = 0
+        self.hidden_file_look = False
         self.undo_path = []
         self.add_stack()
 
@@ -159,13 +197,22 @@ class BeautifulFileManager(ModalView):
         homedir = os.path.expanduser(dir)
         self.undo_path.append(homedir)
         self.ids.path_name.text = homedir
+        self.ids.path_textfield.text = homedir
+        self.now_dir = homedir
         files = os.listdir(homedir)
         for fileitem in files:
+            if fileitem[0] == ".":
+                if not self.hidden_file_look:
+                    continue
             self.ids.stackLayout.add_widget(IconListItem(
                                                 on_press=self.filepressed,
                                                 #source="hello",
                                                 filename=fileitem,
                                                 now_dir=homedir))
+    def create_folder(self):
+         self.dialog = MDDialog(text="Discard draft?", buttons=[
+                                MDFlatButton(text="CANCEL"), MDRaisedButton(text="DISCARD"), ],
+                                )
         
     def undo(self):
         undo_path = ""
