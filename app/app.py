@@ -16,9 +16,11 @@ from kivy.lang import Builder
 
 Builder.load_file('uix/main.kv')
 Builder.load_file('uix/settings.kv')
+Builder.load_file('uix/createSSLKey.kv')
 
 from uix.main import MainWindow   # 追加
 from uix.settings import SettingsWindow
+from uix.createSSLKey import CreateSSLKeyWindow
 
 
 isNoExit = False
@@ -30,6 +32,7 @@ class MainRoot(BoxLayout):
         # 起動時に各画面を作成して使い回す
         self.window1 = Factory.MainWindow()
         self.window2 = Factory.SettingsWindow()
+        self.createsslWindow = Factory.CreateSSLKeyWindow()
         super(MainRoot, self).__init__(**kwargs)
         self.mainDisplay()    # 追加
 
@@ -48,10 +51,11 @@ class MainRoot(BoxLayout):
         self.add_widget(self.window2)
         Window.size = 1000,750
 
-    def createSSLDiskplay(self):
+    def createSSLDisplay(self):
         global isNoExit
         isNoExit = True
         self.clear_widgets()
+        self.add_widget(self.createsslWindow)
         # TODO: create SSL key add_widget
 
 

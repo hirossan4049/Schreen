@@ -6,7 +6,7 @@ from kivymd.toast.kivytoast.kivytoast import toast
 from kivymd.uix.filemanager import MDFileManager
 from kivy.clock import Clock
 from timeout_decorator import TimeoutError
-
+from uix.filemanager import BeautifulFileManager
 import threading
 
 import sys
@@ -28,9 +28,13 @@ class SecondScreen(Screen):
             )
 
 
-    def file_manager_open(self):
-        print("FILE MANAGER OPEN")
-        #self.file_manager.show("/Users/unkonow/")
+    def file_manager_open(self):                      
+        print("FILE MANAGER OPEN")                    
+        popup = BeautifulFileManager(
+                size_hint=(1, 1),)
+        popup.open()     
+
+         #self.file_manager.show("/Users/unkonow/")    
 
 
     def exit_manager(self,*args):
@@ -86,8 +90,6 @@ class CreateSSLKeyWindow(BoxLayout):
     def press_cancel(self):
         pass
 
-    def file_manager_open(self):
-        self.file_manager.show("/")
 
     def exit_manager(self,*args):
         pass

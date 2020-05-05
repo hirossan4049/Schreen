@@ -8,6 +8,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivymd.uix.button import MDFlatButton, MDRaisedButton
 from kivy.properties import StringProperty
 from kivy.uix.behaviors import ButtonBehavior  
+from kivy.clock import Clock
 from kivy.graphics import *
 import time
 import os
@@ -97,7 +98,7 @@ Builder.load_string("""
         text:root.filename
         size_hint:1,None
 
-<InputDialog>:
+<CreateFolderDialog>:
     background:"images/white.png"
     size_hint:.3,.3
     BoxLayout:
@@ -116,7 +117,7 @@ Builder.load_string("""
         Widget:
 
         MDTextField:
-            id:root.textField
+            id:textField
             padding:30,30
             size_hint:.99,None
             pos_hint:{"center_x":.5}
@@ -136,20 +137,50 @@ Builder.load_string("""
             MDRaisedButton:
                 size_hint:None,None
                 text:root.yes
-                on_release:root.ok
+                on_release:root.ok()
 """ )
 
 DIRIMAGE = "images/folder.png"
 IMAGEIMAGE = "images/imageImage.png"
 
-class InputDialog(ModalView):
+class CreateFolderDialog(ModalView):
     title = StringProperty()
     yes = StringProperty("ok")
+    path = StringProperty()
     def __init__(self,**kwargs):
-        super(InputDialog,self).__init__(kwargs)
+        super().__init__(**kwargs)
+        self.path = kwargs["path"]
+        if not self.path[-1] == "/":
+            self.path = self.path + "/"
+
+    # ぐっちゃぐちゃだぁ
     def ok(self):
-        print("on release")
-        print(self.ids.textField.text)
+        createText = self.ids.textField.text
+        if not createText:
+            createText = "名称未設定"
+        try:
+            os.makedirs(self.path+createText)
+            self.dismiss()
+        except FileExistsError:
+            for index in range(101):
+                try:
+                    os.makedirs(self.path+createText+str(index))
+                    self.dismiss()
+                    break
+                except FileExistsError:
+                    continue
+                except:
+                    print("ERROR file not create")
+                    break
+            if index == 100:
+                print("FOLDER NOT CREATED")
+        except:
+            print("FOLDER NOT CREATED")
+                
+
+            
+            
+
 
 # Ontouchdown doble click? No.
 class IconListItem(ButtonBehavior,BoxLayout):
@@ -214,7 +245,8 @@ class BeautifulFileManager(ModalView):
         self.backtime = 0
         self.hidden_file_look = False
         self.undo_path = []
-        self.add_stack()
+        self.add_stack()  
+        Clock.schedule_interval(self.check_dir_loop,2)
 
         #homedir = os.path.expanduser("~")
         #files = os.listdir(homedir)
@@ -250,6 +282,7 @@ class BeautifulFileManager(ModalView):
         self.ids.path_textfield.text = homedir
         self.now_dir = homedir
         files = os.listdir(homedir)
+        self.now_listdir = files
         for fileitem in files:
             if fileitem[0] == ".":
                 if not self.hidden_file_look:
@@ -260,9 +293,16 @@ class BeautifulFileManager(ModalView):
                                                 filename=fileitem,
                                                 now_dir=homedir))
     def create_folder(self):
-        dialog = InputDialog(title="ファイル名を入力",)
-        dialog.bind
+        dialog = CreateFolderDialog(title="ファイル名を入力",path=self.now_dir)
         dialog.open()
+
+    def check_dir_loop(self,*args):
+        try:
+            now_listdir = os.listdir(self.now_dir)
+            if not self.now_listdir == os.listdir(self.now_dir):
+                self.add_stack(dir=self.now_dir)
+        except FileNotFoundError:
+            self.undo()
         
     def undo(self):
         undo_path = ""
