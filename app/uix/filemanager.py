@@ -260,7 +260,7 @@ class BeautifulFileManager(ModalView):
                                                 filename=fileitem,
                                                 now_dir=homedir))
     def create_folder(self):
-        dialog = InputDialog(title="ファイル名を入力",yes="ok")
+        dialog = InputDialog(title="ファイル名を入力",)
         dialog.bind
         dialog.open()
         
