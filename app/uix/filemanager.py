@@ -96,10 +96,60 @@ Builder.load_string("""
         halign:"center"
         text:root.filename
         size_hint:1,None
+
+<InputDialog>:
+    background:"images/white.png"
+    size_hint:.3,.3
+    BoxLayout:
+        orientation:"vertical"
+        MDLabel:
+            size_hint:1,None
+            padding:30,10
+#            pos_hint: {"center_y": 0.9}
+            text:root.title
+            font_size:45
+            color:0.32, 0.43, 0.47,1
+            height: self.texture_size[1]
+
+        MDSeparator:
+
+        Widget:
+
+        MDTextField:
+            id:root.textField
+            padding:30,30
+            size_hint:.99,None
+            pos_hint:{"center_x":.5}
+            size:0,75
+            #color:0.32, 0.43, 0.47,1
+
+        BoxLayout:
+            padding:40,10
+            Widget:
+            MDTextButton:
+                padding:30,30
+                size_hint:None,None
+                text:"閉じる"
+                pos_hint: {"center_x": 0.9}
+                on_release:root.dismiss()
+
+            MDRaisedButton:
+                size_hint:None,None
+                text:root.yes
+                on_release:root.ok
 """ )
 
 DIRIMAGE = "images/folder.png"
 IMAGEIMAGE = "images/imageImage.png"
+
+class InputDialog(ModalView):
+    title = StringProperty()
+    yes = StringProperty("ok")
+    def __init__(self,**kwargs):
+        super(InputDialog,self).__init__(kwargs)
+    def ok(self):
+        print("on release")
+        print(self.ids.textField.text)
 
 # Ontouchdown doble click? No.
 class IconListItem(ButtonBehavior,BoxLayout):
@@ -210,9 +260,9 @@ class BeautifulFileManager(ModalView):
                                                 filename=fileitem,
                                                 now_dir=homedir))
     def create_folder(self):
-         self.dialog = MDDialog(text="Discard draft?", buttons=[
-                                MDFlatButton(text="CANCEL"), MDRaisedButton(text="DISCARD"), ],
-                                )
+        dialog = InputDialog(title="ファイル名を入力",yes="ok")
+        dialog.bind
+        dialog.open()
         
     def undo(self):
         undo_path = ""
