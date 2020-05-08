@@ -132,6 +132,7 @@ def shutdown_server():
     global do_run
     import requests
     do_run = False
+    Logger.info("flask:終了しようとしています。")
     try:
         if isSsl:
             requests.get("https://{ip}:{port}/shutdown/{uuid}".format(ip=localIP, port=port, uuid=SHUTDOWN_UUID))

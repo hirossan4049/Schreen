@@ -18,7 +18,7 @@ Builder.load_file('uix/main.kv')
 Builder.load_file('uix/settings.kv')
 Builder.load_file('uix/createSSLKey.kv')
 
-from uix.main import MainWindow   # 追加
+from uix.main import MainWindow
 from uix.settings import SettingsWindow
 from uix.createSSLKey import CreateSSLKeyWindow
 
@@ -39,6 +39,7 @@ class MainRoot(BoxLayout):
     def mainDisplay(self):
         global isNoExit
         isNoExit = False
+        self.clear_widgets()
         self.clear_widgets()
         self.add_widget(self.window1)
         Window.size = 500, 300
@@ -77,6 +78,7 @@ def reset():
         Cache.print_usage()
         for cat in Cache._categories:
             Cache._objects[cat] = {}
+
 
 if __name__ == "__main__":
     MainApp().run()

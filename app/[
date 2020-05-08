@@ -86,17 +86,17 @@ Builder.load_string("""
                 on_release:root.dismiss()      
 <IconListItem>:
     size_hint:None,None
-    #size:250,250
-    size:100,100
+    size:250,250
+    #size:100,100
     orientation:"vertical"
     Image:
+        #text:root.source
         source:root.source
-        size_hint:1,1
-        #size_hint:None,None
-        #size:50,50
+        #size_hint:1,1
+        size_hint:None,None
+        size:100,90
     MDLabel:
         size_hint:1,None
-        size:10,100
         text_size:self.size
         halign:"center"
         text:root.filename

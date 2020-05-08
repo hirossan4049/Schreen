@@ -68,6 +68,7 @@ class Sct_loop:
                 # print("NOW LOADING")
                 time.sleep(1/30)
                 # time.sleep(1 / (self.quality * 30))
+            print("DO RUN END")
 
     def fps_checker(self):
         self._fps_cache = 0
