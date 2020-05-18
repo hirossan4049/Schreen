@@ -31,7 +31,7 @@ Builder.load_string("""
 
 <BeautifulFileManager>:
     background:"images/white.png"
-    size_hint:None,None
+    size_hint:1,1
     BoxLayout:
         orientation:"vertical"
         BoxLayout:

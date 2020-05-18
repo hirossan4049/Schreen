@@ -1,3 +1,7 @@
+import threading
+import sys
+import pathlib
+
 from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 from kivymd.app import MDApp
 from kivy.uix.boxlayout import BoxLayout
@@ -6,13 +10,11 @@ from kivymd.toast.kivytoast.kivytoast import toast
 from kivymd.uix.filemanager import MDFileManager
 from kivy.clock import Clock
 from timeout_decorator import TimeoutError
-from uix.filemanager import BeautifulFileManager
-import threading
 
-import sys
-import pathlib
+from uix.filemanager import BeautifulFileManager
+
 current_dir = pathlib.Path(__file__).resolve().parent
-print(current_dir)
+#print(current_dir)
 sys.path.append( str(current_dir) + '/../settings/' )
 from ssl_setting import CreateSSLKey,OpenSSLNotFoundError
 
@@ -30,8 +32,7 @@ class SecondScreen(Screen):
 
     def file_manager_open(self):                      
         print("FILE MANAGER OPEN")                    
-        popup = BeautifulFileManager(
-                size_hint=(1, 1),)
+        popup = BeautifulFileManager()
         popup.open()     
 
          #self.file_manager.show("/Users/unkonow/")    

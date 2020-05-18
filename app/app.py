@@ -29,17 +29,15 @@ class MainRoot(BoxLayout):
     window2 = None
 
     def __init__(self, **kwargs):
-        # 起動時に各画面を作成して使い回す
         self.window1 = Factory.MainWindow()
         self.window2 = Factory.SettingsWindow()
         self.createsslWindow = Factory.CreateSSLKeyWindow()
         super(MainRoot, self).__init__(**kwargs)
-        self.mainDisplay()    # 追加
+        self.mainDisplay()  
 
     def mainDisplay(self):
         global isNoExit
         isNoExit = False
-        self.clear_widgets()
         self.clear_widgets()
         self.add_widget(self.window1)
         Window.size = 500, 300
@@ -57,7 +55,6 @@ class MainRoot(BoxLayout):
         isNoExit = True
         self.clear_widgets()
         self.add_widget(self.createsslWindow)
-        # TODO: create SSL key add_widget
 
 
 
