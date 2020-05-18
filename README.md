@@ -1,4 +1,4 @@
-# Schreen1.1.1
+# Schreen2.0.0 BETA
 This application is easy to screen sharing.
 <br>
 かんたんにローカル内で画面共有ができるアプリケーションでｔｈ。
