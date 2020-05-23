@@ -1,6 +1,14 @@
-from kivymd.app import MDApp
-from kivymd.uix.label import MDLabel
+import time
+import os
+
+from kivy.clock import Clock
+from kivy.graphics import *
 from kivy.lang import Builder
+from kivymd.app import MDApp
+from kivy.event import EventDispatcher
+from kivy.properties import ObjectProperty
+
+from kivymd.uix.label import MDLabel
 from kivy.uix.modalview import ModalView
 from kivy.uix.boxlayout import BoxLayout 
 from kivymd.uix.dialog import MDDialog
@@ -8,15 +16,11 @@ from kivy.uix.floatlayout import FloatLayout
 from kivymd.uix.button import MDFlatButton, MDRaisedButton
 from kivy.properties import StringProperty
 from kivy.uix.behaviors import ButtonBehavior  
-from kivy.clock import Clock
-from kivy.graphics import *
-import time
-import os
 
 # FIXME:なんでデフォルトの（ｒｙhh
-# [x] Kivy Filemanager -> ダサい
-# [x] kivymd FIlemanager -> 動かん
-# [x] tkinter filemanager -> なんか怒られた
+# - [x] Kivy Filemanager -> ダサい
+# - [x] kivymd FIlemanager -> 動かん
+# - [x] tkinter filemanager -> なんか怒られた
 
 # RecycleView使ってないけど許せ
 # Windows not friendly :)
@@ -65,35 +69,66 @@ Builder.load_string("""
 
         MDSeparator:
 
+
         BoxLayout:
             size_hint:1,None
-            padding: dp(10)
-            MDRaisedButton:
-                text:"createFolder"
-                on_release:root.create_folder()
+            Widget:
+                size_hint:None,None
+                size:dp(30),dp(30)
             MDTextField:
                 id:path_textfield
-                size_hint:.8,None
-                pos_hint:{"center_y":.5}
-                text:"ola!"
-                #mode: "rectangle"
-
-            MDTextButton:
-                padding:30,30
+                size_hint:1,None
+            Widget:
                 size_hint:None,None
-                text:"閉じる"
-                pos_hint: {"center_x": 0.9}
+                size:dp(30),dp(30)
+
+
+        BoxLayout:
+            size_hint:1,None
+            size:1,dp(30)
+            padding: dp(10)
+            spacing: 30
+
+            Widget:
+
+            MDRectangleFlatButton:
+                text:"createFolder"
+                on_release:root.create_folder()
+                size_hint:None,None
+                size:dp(25),dp(25)
+
+            #MDTextField:
+            #    id:path_textfield
+            #    size_hint:.8,None
+            #    pos_hint:{"center_y":.5}
+            #    text:"ola!"
+            #    #mode: "rectangle"
+
+            #MDRectangleFlatButton:
+            MDRaisedButton:
+                text:"Done"
+                size_hint:None,None
+                size:dp(25),dp(25)
+                on_release:on_selected()
+                
+            MDRectangleFlatButton:
+                #padding:30,30
+                size_hint:None,None
+                size: dp(25),dp(25)
+                text: "cancel"
+                #pos_hint: {"center_x": 0.9}
                 on_release:root.dismiss()      
+
 <IconListItem>:
     size_hint:None,None
-    #size:250,250
-    size:100,100
+    size:dp(100),dp(100)
+    #size:100,100
     orientation:"vertical"
     Image:
         source:root.source
         size_hint:1,1
         #size_hint:None,None
-        #size:50,50
+        #size:dp(75),dp(100)
     MDLabel:
         size_hint:1,None
         size:10,100
@@ -227,7 +262,6 @@ class IconListItem(ButtonBehavior,BoxLayout):
             image = "images/nazoImage.png"
         self.source = image
         
-        pass
     def setIcon(self,imagepath):
         pass
     def on_release(self,*args):
@@ -239,13 +273,16 @@ class IconListItem(ButtonBehavior,BoxLayout):
 
 
 
-class BeautifulFileManager(ModalView):
+class BeautifulFileManager(ModalView,EventDispatcher):
+    #__events__ = ("on_selected",)
+    on_selected = ObjectProperty()
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         #print(kwargs)
         #self._return_func = kwargs["return_func"]
-        self.baclick = ""   
-        #self.backfilepath = ""
+        #self.register_event_type('on_selected')
+        #self.bind(on_selected=self.on_selected)
+        self.baclick = ""   #self.backfilepath = ""
         self.now_dir = ""
         self.backtime = 0
         self.hidden_file_look = False
@@ -262,6 +299,8 @@ class BeautifulFileManager(ModalView):
         #                                        #source="hello",
         #                                        filename=fileitem,
         #                                        now_dir=homedir))
+    def on_selected(self,*args,**kwargs):
+        pass
 
     def filepressed(self,*args):
         if not args:
@@ -330,10 +369,12 @@ class TestWindow(FloatLayout):
     def on_press(self):
         popup = BeautifulFileManager(
                 size_hint=(1, 1),
+                on_selected=self.return_func
                 )
+       # popup.bind(on_selected=self.return_func)
         popup.open()     
     
-    def return_func(self,path):
+    def return_func(self):
         print("PATH:",path)
 
 
