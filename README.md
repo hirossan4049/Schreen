@@ -3,6 +3,13 @@ This application is easy to screen sharing.
 <br>
 かんたんにローカル内で画面共有ができるアプリケーションでｔｈ。
 
+# TODO
+- [ ] filemanager
+- [ ] ssl #10
+- [ ] settings window
+- [ ] resolution change bug #12
+
+
 # DEMO
 ![schreenDEMO](https://user-images.githubusercontent.com/50548952/77206946-8a8d9b00-6b3b-11ea-9e69-25570f4c82ff.gif)
 # Requirement
@@ -33,20 +40,14 @@ python app/main.py
 
 # ChangeLog
 **1.1.1** : flask import 場所変更。起動速度上昇。
+**2.0.0** : comming soon...
 
 # Note
 `pyinstaller`で`.app`化するときは、`app/DEBUG.py`の`DEBUG=True`を`DEBUG=False`にしてください。
-# Packaging
-## MacOS
-coming soon.
-## Windows
-coming soon.
-## Linux(debian)
-coming soon.
+
+
 # Author
-
 * hirossan4049
-
 
 # License
 "Schreen" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
