@@ -113,7 +113,7 @@ Builder.load_string("""
                 text:"Done"
                 size_hint:None,None
                 size:dp(25),dp(25)
-                on_release:on_selected()
+                on_release:root.on_done()
                 
             MDRectangleFlatButton:
                 #padding:30,30
@@ -277,16 +277,25 @@ class IconListItem(ButtonBehavior,BoxLayout):
 
 
 
-
+# TODO:FILTER APPEND
+# TODO:
 class BeautifulFileManager(ModalView,EventDispatcher):
     #__events__ = ("on_selected",)
-    on_selected = ObjectProperty()
-    def __init__(self,**kwargs):
+    #on_selected = ObjectProperty(None)
+    #on_selected = None
+    def __init__(self,**kwargs):  
+        #self.register_event_type('on_selected')
         super().__init__(**kwargs)
         #print(kwargs)
         #self._return_func = kwargs["return_func"]
         #self.register_event_type('on_selected')
         #self.bind(on_selected=self.on_selected)
+        self.selected_func = kwargs.pop("on_selected")
+        try:
+            self.filter_exts = kwargs.pop("filter_exts")
+        except KeyError:
+            self.filter_exts = []
+            
         self.baclick = ""   #self.backfilepath = ""
         self.now_dir = ""
         self.thread_task = 0
@@ -306,8 +315,11 @@ class BeautifulFileManager(ModalView,EventDispatcher):
         #                                        #source="hello",
         #                                        filename=fileitem,
         #                                        now_dir=homedir))
-    def on_selected(self,*args,**kwargs):
-        pass
+    def on_done(self):
+        self.selected_func(self.now_dir)
+        self.dismiss()
+    def on_selected(self,*args):
+        print("i am dispatch")
 
     def filepressed(self,*args):
         if not args:
@@ -400,11 +412,12 @@ class TestWindow(FloatLayout):
                 size_hint=(1, 1),
                 on_selected=self.return_func
                 )
-       # popup.bind(on_selected=self.return_func)
+        #popup.on_selected = self.return_func
+        #popup.bind(on_selected=self.return_func)
         popup.open()     
     
-    def return_func(self):
-        print("PATH:",path)
+    def return_func(self,path,*args):
+        print("RETURN FUNC",path)
 
 
 class MainApp(MDApp):
