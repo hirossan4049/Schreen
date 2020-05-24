@@ -1,7 +1,11 @@
 import time
 import os
+import threading
 
-from kivy.clock import Clock
+from  multiprocessing import Process
+import concurrent.futures
+
+from kivy.clock import Clock, mainthread
 from kivy.graphics import *
 from kivy.lang import Builder
 from kivymd.app import MDApp
@@ -234,7 +238,7 @@ class IconListItem(ButtonBehavior,BoxLayout):
         self.isdir = False
         self.filecheck()
 
-    
+    @mainthread
     def filecheck(self):
         if os.path.isdir(self.filepath):
             self.isdir = True
@@ -246,6 +250,7 @@ class IconListItem(ButtonBehavior,BoxLayout):
             path,ext = os.path.splitext(os.path.basename(self.filename))
             path = path[:10]
             self.filename = path + ".." + ext
+        
 
 
     def imget(self):
@@ -284,10 +289,12 @@ class BeautifulFileManager(ModalView,EventDispatcher):
         #self.bind(on_selected=self.on_selected)
         self.baclick = ""   #self.backfilepath = ""
         self.now_dir = ""
+        self.thread_task = 0
         self.backtime = 0
         self.hidden_file_look = False
         self.undo_path = []
-        self.add_stack()  
+        self.add_stack()
+        #Clock.schedule_once(self.add_stack,1)
         Clock.schedule_interval(self.check_dir_loop,2)
 
         #homedir = os.path.expanduser("~")
@@ -318,24 +325,45 @@ class BeautifulFileManager(ModalView,EventDispatcher):
     def stack_clear(self):
         self.ids.stackLayout.clear_widgets()
             
-    def add_stack(self,dir="~"):
+    def add_stack(self,*args,dir="~"):
+        print("dirrrr",dir)
         self.stack_clear()
         homedir = os.path.expanduser(dir)
         self.undo_path.append(homedir)
+        print(self.undo_path)
         self.ids.path_name.text = homedir
         self.ids.path_textfield.text = homedir
         self.now_dir = homedir
         files = os.listdir(homedir)
         self.now_listdir = files
+
+        #threading.Thread(target=self.add_item_stack,args=(files,homedir)).start()
         for fileitem in files:
             if fileitem[0] == ".":
                 if not self.hidden_file_look:
                     continue
-            self.ids.stackLayout.add_widget(IconListItem(
-                                                on_press=self.filepressed,
-                                                #source="hello",
-                                                filename=fileitem,
-                                                now_dir=homedir))
+
+            threading.Thread(target=self.add_item_stack,args=(fileitem,homedir)).start()
+            
+            #self.ids.stackLayout.add_widget(IconListItem(
+            #                                    on_press=self.filepressed,
+            #                                    #source="hello",
+            #                                    filename=fileitem,
+            #                                    now_dir=homedir))
+
+
+    def add_item_stack(self,filename,homedir):
+        #for fileitem in files:
+        #    if fileitem[0] == ".":
+        #        if not self.hidden_file_look:
+        #            continue
+        self.ids.stackLayout.add_widget(IconListItem(
+                                            on_press=self.filepressed,
+                                            filename=filename,
+                                            now_dir=homedir))
+        
+
+
     def create_folder(self):
         dialog = CreateFolderDialog(title="ファイル名を入力",path=self.now_dir)
         dialog.open()
@@ -352,12 +380,13 @@ class BeautifulFileManager(ModalView,EventDispatcher):
         undo_path = ""
         try:
             undo_path = self.undo_path.pop(-2)
+            print("undopath",undo_path)
             del self.undo_path[-1]
         except IndexError:
             from kivymd.toast import toast
             toast("これ以上戻れません")
             return
-        self.add_stack(undo_path)
+        self.add_stack(dir=undo_path)
 
         
     
