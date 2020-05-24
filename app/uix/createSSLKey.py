@@ -24,24 +24,20 @@ class FirstScreen(Screen):
 class SecondScreen(Screen):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.file_manager = MDFileManager(
-            exit_manager = self.exit_manager,
-            select_path = self.select_path,
-            )
+
+        # geoip使ったろおもたけど流石にキモいからやめた
+        self.ids.countryTextField.text = "JP"
+        self.ids.provinceTextField.text = "Osaka"
+        self.ids.localityTextField.text = "Sakai"
+        self.ids.emailTextField.text = ""
 
 
     def file_manager_open(self):                      
-        print("FILE MANAGER OPEN")                    
-        popup = BeautifulFileManager()
+        popup = BeautifulFileManager(on_selected=self.select_path)
         popup.open()     
 
-         #self.file_manager.show("/Users/unkonow/")    
-
-
-    def exit_manager(self,*args):
-        pass
     def select_path(self,path):
-        print(path)
+        self.ids.keyPathTextField.text = path
 
 class ThirdScreen(Screen):
     pass
@@ -85,7 +81,7 @@ class CreateSSLKeyWindow(BoxLayout):
             self.ids.nextButton.text = "Exit"
         elif nowscreen == "done":
             #TODO:EXIT
-            pass
+            self.app.settingsDisplay()
         self.ids.wizard_ScreenManager.current = nextscreen
 
     def press_cancel(self):

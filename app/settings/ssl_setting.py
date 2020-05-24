@@ -36,14 +36,14 @@ class CreateSSLKey:
         pass
 
     def _createSecrtKey(self):
-        retn = pexpect.run("openssl genrsa -out {path}/secret.key 2048".format(path=self.path)).decode("utf-8")
+        retn = pexpect.run("openssl genrsa -out '{path}/secret.key' 2048".format(path=self.path)).decode("utf-8")
         if retn.split("\r")[0] == "Generating RSA private key, 2048 bit long modulus":
             print("OK!!")
         else:
             print("ERROR!:",str(retn))
  
     def _createcsr(self):
-        newkeyCommand = pexpect.spawn("openssl req -new -sha256 -key {path}/secret.key -out {path}/server.csr".format(path=self.path))
+        newkeyCommand = pexpect.spawn("openssl req -new -sha256 -key '{path}/secret.key' -out '{path}/server.csr'".format(path=self.path))
         #print(newkeyCommand)
         # TODO:self DE
         #newKeyCommand.expect("^(?=.*Country).*$")
@@ -64,7 +64,7 @@ class CreateSSLKey:
             h.write("subjectAltName = IP:{ip}".format(ip=self.ip))
 
     def _createCrt(self):
-        retn = pexpect.run("openssl x509 -req -sha256 -days 3650 -signkey {path}/secret.key -in {path}/server.csr -out {path}/server.crt -extfile {path}/san.txt".format(path=self.path)).decode("utf-8")
+        retn = pexpect.run("openssl x509 -req -sha256 -days 3650 -signkey '{path}/secret.key' -in '{path}/server.csr' -out '{path}/server.crt' -extfile '{path}/san.txt'".format(path=self.path)).decode("utf-8")
         if retn.split("\r")[0] == "Signature ok":
             print("OK!")
         else:
