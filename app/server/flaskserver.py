@@ -1,10 +1,13 @@
-from flask import Flask, Response, request, send_from_directory, render_template, url_for
+import sys
+import os
 import time
 import threading
 import socket
 import uuid
-import sys
-import os
+import configparser
+
+from flask import Flask, Response, request, send_from_directory, render_template, url_for
+
 from server.sct_loop import Sct_loop
 from kivy import Logger
 
@@ -29,12 +32,21 @@ except:
     Logger.error("INTERNET ERROR")
 # FIXME:Flaskってどうやったらきれいにかけるんや？
 
+config_file = configparser.ConfigParser()
+config_file.read('settings/config.ini')
+
+print("CONFIGGGGGGGG",config_file.sections())
+
 do_run = True
 quality = 0
 port = 2525
-isSsl = False
-cert = "/Users/unkonow/Documents/pg/python/nowProject/schreen/Schreen/app/ssl/server.crt"
-key  = "/Users/unkonow/Documents/pg/python/nowProject/schreen/Schreen/app/ssl/secret.key"
+isSsl  = eval(config_file.get("SSLSettings","enable"))
+cert    = config_file.get("SSLSettings","CertPath")
+key     = config_file.get("SSLSettings","KeyPath")
+
+Logger.info("isSSL:"+ str(isSsl))
+Logger.info("Cert:" + cert)
+Logger.info("Key:" + key)
 
 SHUTDOWN_UUID = uuid.uuid4()
 
@@ -110,6 +122,7 @@ def openBrowser():
 
 
 def startServer():
+    Logger.info("server:====== START SERVER ====")
     global do_run
     do_run = True
     sct_cls.start()
@@ -119,6 +132,7 @@ def startServer():
     # app.run_server(debug=False, host=localIP, port=port)
     if isSsl:
         try:
+            Logger.info("SSL:TRUE!")
             app.run(debug=False, host=localIP, port=port, ssl_context=(cert, key),  threaded=True)
         except FileNotFoundError:
             logger.error("FILE NOT FOUND ERROR")

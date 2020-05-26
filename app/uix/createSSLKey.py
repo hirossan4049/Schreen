@@ -112,7 +112,7 @@ class CreateSSLKeyWindow(BoxLayout):
     def createStartSSLKey(self,*args):
         secondScreen = self.ids.wizard_ScreenManager.get_screen("second")
 
-        ip = "192.168.0.100"
+        ip = "192.168.0.107"
 
         path     = secondScreen.ids.keyPathTextField.text
         country  = secondScreen.ids.countryTextField.text
