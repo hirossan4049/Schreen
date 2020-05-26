@@ -52,11 +52,9 @@ class CreateSSLKeyWindow(BoxLayout):
         self.ids.wizard_ScreenManager.add_widget(ThirdScreen(name="third"))
         self.ids.wizard_ScreenManager.add_widget(DoneScreen(name="done"))
 
-        self.file_manager = MDFileManager(
-                    exit_manager=self.exit_manager,
-                    select_path=self.select_path,
-                    #previous=True,
-                    )
+
+
+
 
 
     def press_next(self):
@@ -81,7 +79,10 @@ class CreateSSLKeyWindow(BoxLayout):
             self.ids.nextButton.text = "Exit"
         elif nowscreen == "done":
             #TODO:EXIT
-            self.app.settingsDisplay()
+            #self.app.settingsDisplay()
+            from kivymd.app import MDApp
+            MDApp.get_running_app().stop()
+            return
         self.ids.wizard_ScreenManager.current = nextscreen
 
     def press_cancel(self):
@@ -111,7 +112,6 @@ class CreateSSLKeyWindow(BoxLayout):
     def createStartSSLKey(self,*args):
         secondScreen = self.ids.wizard_ScreenManager.get_screen("second")
 
-
         ip = "192.168.0.100"
 
         path     = secondScreen.ids.keyPathTextField.text
@@ -140,6 +140,19 @@ class CreateSSLKeyWindow(BoxLayout):
         else:
             toast("Done!")
         self.ids.nextButton.disabled = False
+        self.save_settings(path)
+
+    def save_settings(self,path):
+        self.save_config("SSLSettings","CertPath",path+"/server.crt")
+        self.save_config("SSLSettings","KeyPath",path+"/secret.key")
+
+    def save_config(self, settings, content, arg):
+        import configparser
+        config = configparser.ConfigParser()
+        config.read("settings/config.ini")
+        config.set(settings,content,str(arg))
+        with open("settings/config.ini","w") as h:
+            config.write(h)
         
 
     #def __init__(self,path,ip,country="JP",province="Osaka",locality="Sakai",email="unko@unko.com"):

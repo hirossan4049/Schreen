@@ -1,3 +1,5 @@
+#: import FileTextField uix.filetextfield
+
 #FIXME:KvViewer
 #SettingsWindow
 <SettingsWindow>:
@@ -9,9 +11,9 @@
             size_hint:.3,1
             id:setting_list_window
 
+
             ScrollView:
                 #size_hint_x:.4
-
                 #size_hint:1,1
                 BoxLayout:
                     id:setting_list
@@ -21,29 +23,56 @@
                     height: self.minimum_height
                     bar_width: 0
 
-                    MDFlatButton:
-                        font_size: dp(10)
+                    #MDFlatButton:
+                    MDRectangleFlatIconButton:
+                        id:sslSettings
+                        size_hint:1,None
+                        size:1,dp(40)
+                        font_size: dp(8)
                         text_size:self.size
                         halign: 'left'
-                        text:"SSL"
+                        text:"SSL Settings"
                         text_color:0,0,0,.7
-                        size_hint_x:1
+                        
                         on_release:root.gotoSSL()
-                    MDFlatButton:
-                        font_size: dp(10)
-                        size_hint_x:1
+                    MDRectangleFlatIconButton:
+                        id:langSettings
+                        size_hint:1,None
+                        size:1,dp(40)
+                        font_size: dp(8)
                         text:"言語-Lang"
+                        #text_color:0,0,0,.7
+                        text_color: 0.01,0.04,0.06,.7
                         on_release:root.gotoLang()
-                    MDFlatButton:
-                        font_size: dp(10)
-                        size_hint_x:1
+                    MDRectangleFlatIconButton:
+                        id:darkmodeSettings
+                        size_hint:1,None
+                        size:1,dp(40)
+                        font_size: dp(8)
                         text:"Darkmode"
+                        text_color:0,0,0,.7
                         on_release:root.gotoDarkmode()
-                    MDFlatButton:
-                        font_size: dp(10)
-                        size_hint_x:1
+                    MDRectangleFlatIconButton:
+                        id:developerSettings
+                        size_hint:1,None
+                        size:1,dp(40)
+                        font_size: dp(8)
                         text:"Developer"
+                        text_color:0.02,0.03,0.03,.7
                         on_release:root.gotoDeveloper()
+
+                    MDRectangleFlatIconButton:
+                    #SettingsItemButton:
+                        id:helpSettings
+                        size_hint:1,None
+                        size:1,dp(40)
+                        font_size: dp(8)
+                        text:"help"
+                        icon:"help"
+                        text_color:0,0,.2,.7
+                        #md_bg_color:.3,.3,.3,.2
+                        #background_color:1,0,0,1
+                        on_release:root.gotoHelp()
                                                                                                                 
 
 
@@ -86,6 +115,7 @@
             # FIXME:kvViewer
             ScreenManager:
                 size_hint:1,1
+                #md_bg_color:0,.9,.9,1
                 id:setting_screen_manager
             #SSLSetting:
 
@@ -166,7 +196,7 @@
                     id:enableSwitch
                     size_hint:None,None
                     size:80,40
-                    pos_hint:{"center_y":.5}
+                    #pos_hint:{"center_y":.5}
 
             BoxLayout:
                 #size_hint:1,.1
@@ -180,10 +210,10 @@
                     size:500,40
                     #halign: 'left'
                     valign: 'middle'
-                    text:"OpenSSL PATH"
+                    text:"OpenSSL Path"
                 Widget:
-                    size_hint:.3,None
-                MDTextField:
+                    size_hint:None,None
+                FileTextField:
                     id:opensslPathTextField
                     size_hint:None,None
                     pos_hint:{"center_y":.5}
@@ -237,7 +267,7 @@
                     text:"cert Path"
                 Widget:
                     size_hint:.3,None
-                MDTextField:                
+                FileTextField:                
                     id:certPathTextField
                     size_hint:None,None
                     size:500,40
@@ -253,7 +283,7 @@
                     text:"key path"
                 Widget:
                     size_hint:.3,None
-                MDTextField:                
+                FileTextField:                
                     id:keyPathTextField
                     size_hint:None,None
                     size:500,40  
@@ -310,3 +340,27 @@
         MDLabel:
             text:"Developer Setting"
 
+
+
+
+
+
+
+# ======== CUSTOM ==========
+<SettingsItemButton>
+    #size_hint_x: None
+    #width: dp(150)
+    #markup: False
+    BoxLayout:
+        spacing: dp(10)
+        MDIcon:
+            icon: root.icon
+            theme_text_color: 'Custom'
+            text_color: 0,0,0,.8
+            size_hint_x: None
+            width: self.texture_size[0]
+        MDLabel:
+            text: root.text
+            theme_text_color: 'Custom'
+            text_color: 0,0,0,.8
+            #markup: root.markup
