@@ -1,70 +1,116 @@
-import os
-import kivy
+import threading
 
 from kivymd.app import MDApp
-from kivy.core.window import Window
-from kivy.factory import Factory
-from kivy.uix.boxlayout import BoxLayout
-
-from kivy.core.text import LabelBase, DEFAULT_FONT
-from kivy.resources import resource_add_path
-
-from kivy.core.window import Window
-
-
 from kivy.lang import Builder
+from kivy.core.window import Window
+from kivy.clock import Clock
 
-Builder.load_file('uix/main.kv')
-Builder.load_file('uix/settings.kv')
-Builder.load_file('uix/createSSLKey.kv')
+from kivy.uix.widget import Widget
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
+from kivymd.uix.label import MDLabel
 
 from uix.main import MainWindow
 from uix.settings import SettingsWindow
 from uix.createSSLKey import CreateSSLKeyWindow
+from kivy.lang import Builder
+from kivy.factory import Factory
 
+Builder.load_file('uix/main.kv')
+Builder.load_file('uix/settings.kv')
+Builder.load_file('uix/createSSLKey.kv')
+ 
 
-isNoExit = False
-class MainRoot(BoxLayout):
-    window1 = None
-    window2 = None
+kv_string = """
+<ManagerWindow>:
+    ScreenManager:
+        id:screenmanager
 
-    def __init__(self, **kwargs):
-        self.window1 = Factory.MainWindow()
-        self.window2 = Factory.SettingsWindow()
-        self.createsslWindow = Factory.CreateSSLKeyWindow()
-        super(MainRoot, self).__init__(**kwargs)
-        self.mainDisplay()  
+<MainScreen>:
+    BoxLayout:
+        id:widget
+<SettingsScreen>:
+    BoxLayout:
+        id:widget
+<CreateSSLKeyScreen>:
+    BoxLayout:
+        id:widget
+"""
 
+Builder.load_string(kv_string)
+
+isDontExitMe = False
+undofunc = None
+class ManagerWindow(BoxLayout):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.ids.screenmanager.transition = NoTransition()
+        global undofunc
+        try:
+            print("undo func",undofunc.__name__)
+        except:
+            pass
+        if not undofunc:
+            self.mainDisplay()
+        else:
+            commando = "self.{}()".format(undofunc.__name__)
+            eval(commando)
+        #elif undofunc.__name__ == self.settingsDisplay.__name__:
+        #    self.settingsDisplay()
+        #elif undofunc.__name__ == self.mainDisplay.__name__:
+        #    self.mainDisplay()
+
+    
     def mainDisplay(self):
-        global isNoExit
-        isNoExit = False
-        self.clear_widgets()
-        self.add_widget(self.window1)
+        global isDontExitMe
+        isDontExitMe = False
+        self.ids.screenmanager.switch_to(MainScreen())
         Window.size = 500, 300
 
 
     def settingsDisplay(self):
-        global isNoExit
-        isNoExit = True
-        self.clear_widgets()
-        self.add_widget(self.window2)
-        Window.size = 1000,750
+        global isDontExitMe
+        global undofunc
+        isDontExitMe = True
+        undofunc = self.mainDisplay
+        self.ids.screenmanager.switch_to(SettingsScreen())
+        Window.size = 700,550
 
     def createSSLDisplay(self):
-        global isNoExit
-        isNoExit = True
-        self.clear_widgets()
-        self.add_widget(self.createsslWindow)
+        global isDontExitMe
+        global undofunc
+        isDontExitMe = True
+        undofunc = self.settingsDisplay
+        self.ids.screenmanager.switch_to(CreateSSLKeyScreen())
+        Window.size = 700,500
+
+class MainScreen(Screen):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.ids.widget.add_widget(MainWindow())
+
+class SettingsScreen(Screen):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.ids.widget.add_widget(SettingsWindow())
+
+class CreateSSLKeyScreen(Screen):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.ids.widget.add_widget(CreateSSLKeyWindow())
 
 
+#sm = ScreenManager()
+#mainWindow = Screen(name="hellO")
+#sm.add_widget(SettingsWindow(name='settings'))
+#sm.add_widget(CreateSSLKeyWindow(name='ssl')) 
+#sm.switch_to(Main())
 
-
-class MainApp(MDApp):
-    def __init__(self, **kwargs):
-        super(MainApp, self).__init__(**kwargs)
-        self.title = 'Schreen'
-
-
+class TestApp(MDApp):
+    def build(self):
+        return Factory.ManagerWindow()
+    def on_stop(self):
+        reset()
 
 def reset():
     import kivy.core.window as window
@@ -77,9 +123,9 @@ def reset():
             Cache._objects[cat] = {}
 
 
-if __name__ == "__main__":
-    MainApp().run()
-    while isNoExit:
+if __name__ == '__main__':
+    TestApp().run()
+    while isDontExitMe:
         print("IS NO EXIT")
         reset()
-        MainApp().run()
+        TestApp().run()
