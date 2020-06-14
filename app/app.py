@@ -10,15 +10,31 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 from kivymd.uix.label import MDLabel
 
-from uix.main import MainWindow
-from uix.settings import SettingsWindow
-from uix.createSSLKey import CreateSSLKeyWindow
+try:
+    from app.uix.main import MainWindow
+    from app.uix.settings import SettingsWindow
+    from app.uix.createSSLKey import CreateSSLKeyWindow
+except ImportError:
+    from uix.main import MainWindow
+    from uix.settings import SettingsWindow
+    from uix.createSSLKey import CreateSSLKeyWindow
+    from DEBUG import resource_path
+
 from kivy.lang import Builder
 from kivy.factory import Factory
 
-Builder.load_file('uix/main.kv')
-Builder.load_file('uix/settings.kv')
-Builder.load_file('uix/createSSLKey.kv')
+import os
+os.system('ls')
+os.system('pwd')
+
+try:
+    Builder.load_file('app/uix/main.kv')
+    Builder.load_file('app/uix/settings.kv')
+    Builder.load_file('app/uix/createSSLKey.kv')
+except:
+    Builder.load_file(resource_path('app/uix/main.kv'))
+    Builder.load_file(resource_path('app/uix/settings.kv'))
+    Builder.load_file(resource_path('app/uix/createSSLKey.kv'))
  
 
 kv_string = """
@@ -106,7 +122,7 @@ class CreateSSLKeyScreen(Screen):
 #sm.add_widget(CreateSSLKeyWindow(name='ssl')) 
 #sm.switch_to(Main())
 
-class TestApp(MDApp):
+class MainApp(MDApp):
     def build(self):
         return Factory.ManagerWindow()
     def on_stop(self):
@@ -128,4 +144,4 @@ if __name__ == '__main__':
     while isDontExitMe:
         print("IS NO EXIT")
         reset()
-        TestApp().run()
+        MainApp().run()

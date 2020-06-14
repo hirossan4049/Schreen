@@ -21,6 +21,8 @@ from kivymd.uix.button import MDFlatButton, MDRaisedButton
 from kivy.properties import StringProperty
 from kivy.uix.behaviors import ButtonBehavior  
 
+from DEBUG import resource_path
+
 # FIXME:なんでデフォルトの（ｒｙhh
 # - [x] Kivy Filemanager -> ダサい
 # - [x] kivymd FIlemanager -> 動かん
@@ -182,8 +184,8 @@ Builder.load_string("""
                 on_release:root.ok()
 """ )
 
-DIRIMAGE = "images/folder.png"
-IMAGEIMAGE = "images/imageImage.png"
+DIRIMAGE = "app/images/folder.png"
+IMAGEIMAGE = "app/images/imageImage.png"
 
 class CreateFolderDialog(ModalView):
     title = StringProperty()
@@ -242,9 +244,9 @@ class IconListItem(ButtonBehavior,BoxLayout):
     def filecheck(self):
         if os.path.isdir(self.filepath):
             self.isdir = True
-            self.source = "images/folder.png"
+            self.source = resource_path("app/images/folder.png")
         elif os.path.isfile(self.filepath):
-            self.source = "images/imageImage.png"
+            self.source = resource_path("app/images/imageImage.png")
             self.imget()
         if len(self.filename) >= 13:
             path,ext = os.path.splitext(os.path.basename(self.filename))
@@ -260,11 +262,11 @@ class IconListItem(ButtonBehavior,BoxLayout):
         elif ext == ".png":
             image = self.filepath
         elif ext == ".pdf":
-            image = "images/pdfImage.png"
+            image = resource_path("app/images/pdfImage.png")
         elif ext == ".py":
-            image = "images/pythonImage.png"
+            image = resource_path("app/images/pythonImage.png")
         else:
-            image = "images/nazoImage.png"
+            image = resource_path("app/images/nazoImage.png")
         self.source = image
         
     def setIcon(self,imagepath):

@@ -5,11 +5,12 @@ block_cipher = None
 from kivymd import hooks_path as kivymd_hooks_path
 path = os.path.abspath("app/")
 
-
-a = Analysis(['app/main.py'],
-             pathex=['/Users/linear/Documents/pg/pythonnnnn/schreen/MacOSBuild'],
+a = Analysis(['app/__main__.py'],
+             #pathex=['/Users/linear/Documents/pg/pythonnnnn/schreen/MacOSBuild'],
+             pathex=['/Users/unkonow/Documents/pg/python/nowProject/schreen/Schreen'],
              binaries=[],
              datas=[('app/','app/'),
+                    ("app/uix/","app/uix/"),
                     ("app/images/","app/images/"),
                     ("app/server/templates/","app/server/templates"),
                     ("app/server/","app/server/")],
@@ -44,5 +45,8 @@ exe = EXE(pyz,
 app = BUNDLE(exe,
              name='Schreen.app',
              icon="app/images/icon.icns",
-             info_plist={ 'NSHighResolutionCapable': 'True'},
+             info_plist={
+                 'NSHighResolutionCapable': 'True', # Support Ratina Display
+                 'NSRequiresAquaSystemAppearance': 'Yes', # Support DarkMode?
+                 },
              bundle_identifier=None)

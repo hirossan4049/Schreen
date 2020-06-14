@@ -33,14 +33,12 @@ except:
 # FIXME:Flaskってどうやったらきれいにかけるんや？
 
 config_file = configparser.ConfigParser()
-config_file.read('settings/config.ini')
+config_file.read(resource_path('app/settings/config.ini'))
 
-print("CONFIGGGGGGGG",config_file.sections())
-
-do_run = True
+do_run  = True
 quality = 0
-port = 2525
-isSsl  = eval(config_file.get("SSLSettings","enable"))
+port    = 2525
+isSsl   = eval(config_file.get("SSLSettings","enable"))
 cert    = config_file.get("SSLSettings","CertPath")
 key     = config_file.get("SSLSettings","KeyPath")
 

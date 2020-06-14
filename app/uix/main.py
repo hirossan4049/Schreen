@@ -22,7 +22,10 @@ from kivymd.app import MDApp
 from kivy.lang import Builder
 import threading
 
-from DEBUG import DEBUG,resource_path
+try:
+    from app.DEBUG import DEBUG,resource_path
+except ImportError:
+    from DEBUG import DEBUG,resource_path
 
 
 Logger.info("importTime:{}".format(time.time() - importstart))
@@ -38,7 +41,7 @@ if DEBUG:
     
     """)
     resource_add_path("fonts/")
-    LabelBase.register(DEFAULT_FONT, "fonts/SourceHanSans.otf")
+    LabelBase.register(DEFAULT_FONT, "app/fonts/SourceHanSans.otf")
     help_icon_path = "images/help_icon.png"
     schreen_icon_path = "images/icon.png"
 else:
@@ -183,10 +186,13 @@ class MainApp(MDApp):
         self.icon = schreen_icon_path
         Window.size = 500, 300
 
+    # FIXME: 呼ばれないから処理されないんか：；
     def on_stop(self):
         # FIXME:Clockいくなかった
         #Clock.schedule_once(self.server_stop,0)
+        Logger.info('main:server stopping')
         self.server_stop()
+        Logger.info('main:server stoped')
 
 
     def server_stop(self, *args):

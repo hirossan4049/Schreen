@@ -9,6 +9,7 @@ from uix.filetextfield import FileTextField
 import configparser
 from pprint import pprint
 
+from DEBUG import resource_path
 
 
 
@@ -17,7 +18,7 @@ class SSLSetting(Screen):
         super(SSLSetting,self).__init__(**kwargs)
 
         config_file = configparser.ConfigParser()
-        config_file.read('settings/config.ini')
+        config_file.read(resource_path('app/settings/config.ini'))
 
         self.ssl_enable  = eval(config_file.get("SSLSettings","enable"))
         self.openSSLPath = config_file.get("SSLSettings","OpenSSLPath")
@@ -96,9 +97,9 @@ class SSLSetting(Screen):
 
     def save_config(self, settings, content, arg):
         config = configparser.ConfigParser()
-        config.read("settings/config.ini")
+        config.read(resource_path("app/settings/config.ini"))
         config.set(settings,content,str(arg))
-        with open("settings/config.ini","w") as h:
+        with open(resource_path("app/settings/config.ini"),"w") as h:
             config.write(h)
 
 class LangSetting(Screen):
@@ -183,9 +184,9 @@ class SettingsWindow(BoxLayout):
 
     def save_config(self, settings, content, arg):
         config = configparser.ConfigParser()
-        config.read("settings/config.ini")
+        config.read(resource_path("app/settings/config.ini"))
         config.set(settings,content,arg)
-        with open("settings/config.ini") as h:
+        with open(resource_path("app/settings/config.ini")) as h:
             config.write(h)
 
 

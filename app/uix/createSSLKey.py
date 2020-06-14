@@ -13,10 +13,12 @@ from timeout_decorator import TimeoutError
 
 from uix.filemanager import BeautifulFileManager
 
-current_dir = pathlib.Path(__file__).resolve().parent
-#print(current_dir)
-sys.path.append( str(current_dir) + '/../settings/' )
-from ssl_setting import CreateSSLKey,OpenSSLNotFoundError
+#current_dir = pathlib.Path(__file__).resolve().parent
+##print(current_dir)
+#sys.path.append( str(current_dir) + '/../settings/' )
+
+#from ssl_setting import CreateSSLKey,OpenSSLNotFoundError
+from settings.ssl_setting import CreateSSLKey,OpenSSLNotFoundError
 
 
 class FirstScreen(Screen):
@@ -149,9 +151,9 @@ class CreateSSLKeyWindow(BoxLayout):
     def save_config(self, settings, content, arg):
         import configparser
         config = configparser.ConfigParser()
-        config.read("settings/config.ini")
+        config.read(resource_path("app/settings/config.ini"))
         config.set(settings,content,str(arg))
-        with open("settings/config.ini","w") as h:
+        with open(resource_path("app/settings/config.ini","w")) as h:
             config.write(h)
         
 
