@@ -138,10 +138,12 @@ def reset():
         for cat in Cache._categories:
             Cache._objects[cat] = {}
 
-
-if __name__ == '__main__':
-    TestApp().run()
+def main():
+    MainApp().run()
     while isDontExitMe:
         print("IS NO EXIT")
         reset()
         MainApp().run()
+
+if __name__ == '__main__':
+    main()

@@ -32,7 +32,7 @@ def reset():
             Cache._objects[cat] = {}
 
 try:
-    from app import MainApp
+    from app import main as start_kivy
 except Exception as e:
     print("==============IMPORT  Error=================")
     print(e)
@@ -57,7 +57,7 @@ def main():
     resource_add_path(data)
 
     try:
-        MainApp().run()
+        start_kivy()
     except Exception as e:
         print("==============MainApp Error=================")
         print(e)
