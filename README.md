@@ -20,7 +20,7 @@ read `requiments.txt`.
 **OpenCVのバージョンは、3を使用してください。4だとPyinsatllerでパッケージ化したときにエラー吐きます**
 ## パッケージ化されたものをインストールしたいですか？
 
-** Windows coming soon. sorry. **
+**Windows coming soon. sorry.**
 
 https://github.com/hirossan4049/Schreen/releases
 
@@ -39,8 +39,8 @@ python app/main.py
 ```
 
 # ChangeLog
-**1.1.1** : flask import 場所変更。起動速度上昇。
-**2.0.0** : comming soon...
+- **1.1.1** : flask import 場所変更。起動速度上昇。
+- **2.0.0** : comming soon...
 
 # Note
 `pyinstaller`で`.app`化するときは、`app/DEBUG.py`の`DEBUG=True`を`DEBUG=False`にしてください。
