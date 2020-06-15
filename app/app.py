@@ -14,6 +14,7 @@ try:
     from app.uix.main import MainWindow
     from app.uix.settings import SettingsWindow
     from app.uix.createSSLKey import CreateSSLKeyWindow
+    from app.DEBUG import resource_path
 except ImportError:
     from uix.main import MainWindow
     from uix.settings import SettingsWindow
@@ -24,14 +25,9 @@ from kivy.lang import Builder
 from kivy.factory import Factory
 
 
-try:
-    Builder.load_file('app/uix/main.kv')
-    Builder.load_file('app/uix/settings.kv')
-    Builder.load_file('app/uix/createSSLKey.kv')
-except:
-    Builder.load_file(resource_path('app/uix/main.kv'))
-    Builder.load_file(resource_path('app/uix/settings.kv'))
-    Builder.load_file(resource_path('app/uix/createSSLKey.kv'))
+Builder.load_file(resource_path('app/uix/main.kv'))
+Builder.load_file(resource_path('app/uix/settings.kv'))
+Builder.load_file(resource_path('app/uix/createSSLKey.kv'))
  
 
 import os
@@ -50,7 +46,7 @@ def check_settings_file():
         config_file.get("SSLSettings","OpenSSLPath")
         config_file.get("SSLSettings","CertPath")
         config_file.get("SSLSettings","KeyPath")
-    except:
+    except Exception as e:
         shutil.copy(resource_path('app/settings/config.ini'),path)
 
 

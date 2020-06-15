@@ -8,6 +8,17 @@ Logger.info("===CV2 LOAD OK!===")
 import mss
 import numpy
 # import pyautogui
+import platform
+
+
+def display_size():
+    if platform.system() == 'Darwin':
+        from AppKit import NSScreen
+        width = NSScreen.mainScreen().frame().size.width
+        height = NSScreen.mainScreen().frame().size.height
+        return width,height
+    else:
+        raise
 
 class Sct_loop:
     def __init__(self,quality=2):
@@ -17,7 +28,8 @@ class Sct_loop:
         self.quality = quality
         self.do_run = True
         # FIXME: 画面サイズを取得してやる。
-        self.monitor = {"top": 0, "left": 0, "width": 1920, "height": 1200}
+        width,height = display_size()
+        self.monitor = {"top": 0, "left": 0, "width": width, "height": height}
         self.width = self.monitor["width"] * 2
         self.height = self.monitor["height"] * 2
         self._fps_cache = 0
