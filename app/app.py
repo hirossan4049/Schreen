@@ -36,6 +36,7 @@ except:
 
 import os
 import shutil
+import configparser
 def check_settings_file():
     home = os.path.expanduser('~')
     path = home + '/Schreenconf.ini'
@@ -46,6 +47,9 @@ def check_settings_file():
         config_file = configparser.ConfigParser()
         config_file.read(home + '/Schreenconf.ini')
         config_file.get("SSLSettings","enable")
+        config_file.get("SSLSettings","OpenSSLPath")
+        config_file.get("SSLSettings","CertPath")
+        config_file.get("SSLSettings","KeyPath")
     except:
         shutil.copy(resource_path('app/settings/config.ini'),path)
 
