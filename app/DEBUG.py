@@ -1,7 +1,7 @@
 import os
 import sys
 
-DEBUG = False
+DEBUG = True
 
 def resource_path(relative):
     if DEBUG:

@@ -1,4 +1,5 @@
 import os
+from os.path import expanduser
 
 from kivy.lang import Builder
 from kivymd.app import MDApp
@@ -17,8 +18,9 @@ class SSLSetting(Screen):
     def __init__(self,**kwargs):
         super(SSLSetting,self).__init__(**kwargs)
 
+        home = expanduser('~')
         config_file = configparser.ConfigParser()
-        config_file.read(resource_path('app/settings/config.ini'))
+        config_file.read(home + '/Schreenconf.ini')
 
         self.ssl_enable  = eval(config_file.get("SSLSettings","enable"))
         self.openSSLPath = config_file.get("SSLSettings","OpenSSLPath")
@@ -96,10 +98,11 @@ class SSLSetting(Screen):
 
 
     def save_config(self, settings, content, arg):
-        config = configparser.ConfigParser()
-        config.read(resource_path("app/settings/config.ini"))
+        config = configparser.ConfigParser()    
+        home = expanduser('~')
+        config.read(home + "/Schreenconf.ini")
         config.set(settings,content,str(arg))
-        with open(resource_path("app/settings/config.ini"),"w") as h:
+        with open(home + "/Schreenconf.ini","w") as h:
             config.write(h)
 
 class LangSetting(Screen):
@@ -184,9 +187,10 @@ class SettingsWindow(BoxLayout):
 
     def save_config(self, settings, content, arg):
         config = configparser.ConfigParser()
-        config.read(resource_path("app/settings/config.ini"))
+        home = expanduser('~')
+        config.read(home + "/Schreenconf.ini")
         config.set(settings,content,arg)
-        with open(resource_path("app/settings/config.ini")) as h:
+        with open(home + "/Schreenconf.ini") as h:
             config.write(h)
 
 

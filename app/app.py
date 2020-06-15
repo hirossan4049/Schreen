@@ -23,9 +23,6 @@ except ImportError:
 from kivy.lang import Builder
 from kivy.factory import Factory
 
-import os
-os.system('ls')
-os.system('pwd')
 
 try:
     Builder.load_file('app/uix/main.kv')
@@ -36,6 +33,16 @@ except:
     Builder.load_file(resource_path('app/uix/settings.kv'))
     Builder.load_file(resource_path('app/uix/createSSLKey.kv'))
  
+
+import os
+import shutil
+def check_settings_file():
+    home = os.path.expanduser('~')
+    path = home + '/Schreenconf.ini'
+    if not os.path.isfile(path):
+        shutil.copy(resource_path('app/settings/config.ini'),path)
+
+
 
 kv_string = """
 <ManagerWindow>:
@@ -61,6 +68,7 @@ class ManagerWindow(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.ids.screenmanager.transition = NoTransition()
+        check_settings_file()
         global undofunc
         try:
             print("undo func",undofunc.__name__)

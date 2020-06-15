@@ -150,10 +150,12 @@ class CreateSSLKeyWindow(BoxLayout):
 
     def save_config(self, settings, content, arg):
         import configparser
+        from os.path import expanduser
         config = configparser.ConfigParser()
-        config.read(resource_path("app/settings/config.ini"))
+        home = expanduser('~')
+        config.read(home + "/Schreenconf.ini")
         config.set(settings,content,str(arg))
-        with open(resource_path("app/settings/config.ini","w")) as h:
+        with open(home + "Schreenconf.ini","w") as h:
             config.write(h)
         
 
