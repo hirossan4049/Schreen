@@ -42,6 +42,13 @@ def check_settings_file():
     if not os.path.isfile(path):
         shutil.copy(resource_path('app/settings/config.ini'),path)
 
+    try:
+        config_file = configparser.ConfigParser()
+        config_file.read(home + '/Schreenconf.ini')
+        config_file.get("SSLSettings","enable")
+    except:
+        shutil.copy(resource_path('app/settings/config.ini'),path)
+
 
 
 kv_string = """
