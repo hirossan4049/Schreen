@@ -16,7 +16,7 @@ mss==5.0.0
 numpy==1.18.1
 opencv-contrib-python==4.2.0.32
 opencv-python==3.4.4.19
-Pillow==7.0.0
+Pillow==9.3.0
 plotly==4.5.4
 Pygments==2.7.4
 requests==2.23.0
