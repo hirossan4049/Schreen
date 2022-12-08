@@ -15,7 +15,7 @@ MarkupSafe==1.1.1
 mss==5.0.0
 numpy==1.18.1
 opencv-contrib-python==4.2.0.32
-opencv-python==3.4.4.19
+opencv-python==4.2.0.32
 Pillow==7.0.0
 plotly==4.5.4
 Pygments==2.7.4
